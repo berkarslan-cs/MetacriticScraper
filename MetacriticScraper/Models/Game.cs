@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace MetacriticScraper.Models
 {
@@ -15,6 +16,7 @@ namespace MetacriticScraper.Models
         /// <summary>
         /// Gets or sets platform of the game.
         /// </summary>
+        [IgnoreDataMember]
         public GamePlatform Platform { get; set; }
 
         /// <summary>
@@ -40,6 +42,7 @@ namespace MetacriticScraper.Models
         /// <summary>
         /// Gets or sets release date with ignoring the year. The reason is that Metacritic doesn't show year in the page.
         /// </summary>
+        [IgnoreDataMember]
         public DateTime ReleaseDateWithoutCorrectYear { get; set; }
     }
 }

@@ -81,7 +81,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         private static string GetUrl(string relativeUrl)
         {
             var uri = new Uri(new Uri(CommonConstants.MetacriticSite), relativeUrl);
-            return uri.AbsolutePath;
+            return uri.AbsoluteUri;
         }
 
         private static DateTime GetReleaseDateWithoutCorrectYear(string releaseDate)
