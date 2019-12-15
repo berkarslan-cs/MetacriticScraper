@@ -38,7 +38,7 @@ namespace MetacriticScraper
 
             // DI
             services.AddTransient<IHtmlParser, MetacriticHtmlParser>();
-            services.AddTransient<ISite, CachedSite>();
+            services.AddTransient<ISite, Site>();
             services.AddTransient<ISiteResolver, HtmlAgilitySiteResolver>();
             services.AddTransient<ISiteUriResolver, MetacriticSiteUriResolver>();
             services.AddTransient<IMetacriticGameConverter, MetacriticGameConverter>();

@@ -25,7 +25,7 @@ namespace MetacriticScraper.Models
         /// <summary>
         /// Gets or sets Metacritic score of the game.
         /// </summary>
-        public decimal? MetaScore { get; set; }
+        public int? MetaScore { get; set; }
 
         /// <summary>
         /// Gets or sets user score of the game.

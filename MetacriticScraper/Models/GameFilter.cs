@@ -18,12 +18,12 @@ namespace MetacriticScraper.Models
         /// Gets or sets the platform filter.
         /// </summary>
         [Range(0, 100)]
-        public decimal? MinMetaScore { get; set; }
+        public int? MinMetaScore { get; set; }
 
         /// <summary>
         /// Gets or sets the platform filter.
         /// </summary>
-        [Range(0, 100)]
+        [Range(0, 10)]
         public decimal? MinUserScore { get; set; }
 
         /// <summary>

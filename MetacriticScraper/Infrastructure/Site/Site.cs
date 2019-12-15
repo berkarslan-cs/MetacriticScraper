@@ -10,17 +10,17 @@ namespace MetacriticScraper.Infrastructure.Site
     /// <summary>
     /// Manages the Metacritic games using cache.
     /// </summary>
-    public class CachedSite : ISite
+    public class Site : ISite
     {
         private readonly ISiteResolver siteResolver;
         private readonly IHtmlParser htmlParser;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CachedSite"/> class.
+        /// Initializes a new instance of the <see cref="Site"/> class.
         /// </summary>
         /// <param name="siteResolver">Site resolver.</param>
         /// <param name="htmlParser">Html parser.</param>
-        public CachedSite(
+        public Site(
             ISiteResolver siteResolver,
             IHtmlParser htmlParser)
         {
@@ -40,7 +40,11 @@ namespace MetacriticScraper.Infrastructure.Site
             for (var pageIndex = 0; pageIndex < GetNumberOfPages(gameFilter.Platform); pageIndex++)
             {
                 var htmlDocument = siteResolver.GetHtmlDocument(gameFilter.Platform, pageIndex);
-                var gamesInPage = htmlParser.GetGames(htmlDocument);
+                var gamesInPage = htmlParser.GetGames(htmlDocument, gameFilter.Platform);
+
+                // Fix year of ReleaseDate property (Metacritic doesn't include year in the page so that we need to evaluate it)
+                FixReleaseDate(gamesInPage);
+
                 var filteredGames = GetFilteredGames(gameFilter, gamesInPage);
                 result.AddRange(filteredGames);
 
@@ -50,9 +54,6 @@ namespace MetacriticScraper.Infrastructure.Site
                     break;
                 }
             }
-
-            // Fix year of ReleaseDate property (Metacritic doesn't include year in the page so that we need to evaluate it)
-            FixReleaseDate(result);
 
             return result;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using MetacriticScraper.Models;
 
 namespace MetacriticScraper.Infrastructure.HtmlParser
@@ -8,7 +9,9 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
     public class MetacriticGameConverter : IMetacriticGameConverter
     {
         private const string ToBeDecidedText = "tbd";
-        private const string DefaultReleaseDateFormat = "yyyy MMMM dd";
+        private const string DefaultReleaseDateFormat = "yyyy MMM d";
+        private const string MoreThanOneSpaceRegex = @"\s+";
+        private const string SpaceCharacter = " ";
         private static readonly string GameDataNotFoundErrorMessage = $"Game details cannot be got from the html document. The structure of the website might be changed.";
 
         /// <inheritdoc />
@@ -22,13 +25,22 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
             return new Game()
             {
                 MetaScore = GetMetascore(game.MetaScore),
-                Name = game.Name,
+                Name = GetName(game.Name),
                 Platform = game.Platform,
                 ReleaseDateWithoutCorrectYear = GetReleaseDateWithoutCorrectYear(game.ReleaseDate),
                 Url = GetUrl(game.Url),
                 UserScore = GetUserScore(game.UserScore),
             };
         }
+
+        private static string GetName(string name) =>
+            name.Trim(new char[]
+            {
+                '\r',
+                '\n',
+                '\t',
+                ' ',
+            });
 
         private static decimal? GetUserScore(string userScore)
         {
@@ -48,7 +60,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
             }
         }
 
-        private static decimal? GetMetascore(string metaScore)
+        private static int? GetMetascore(string metaScore)
         {
             if (metaScore.Equals(ToBeDecidedText, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -56,7 +68,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
             }
             else
             {
-                var parseSucceeded = decimal.TryParse(metaScore, out var convertedMetaScore);
+                var parseSucceeded = int.TryParse(metaScore, out var convertedMetaScore);
                 if (!parseSucceeded)
                 {
                     throw new ArgumentException($"Unknown {nameof(metaScore)}: {metaScore}");
@@ -74,7 +86,8 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
 
         private static DateTime GetReleaseDateWithoutCorrectYear(string releaseDate)
         {
-            var releaseDateWithYear = $"{DateTime.Now.Year} {releaseDate}";
+            var normalizedReleaseDate = Regex.Replace(releaseDate, MoreThanOneSpaceRegex, SpaceCharacter);
+            var releaseDateWithYear = $"{DateTime.Now.Year} {normalizedReleaseDate}";
             var parseSucceeded = DateTime.TryParseExact(
                 releaseDateWithYear,
                 DefaultReleaseDateFormat,
