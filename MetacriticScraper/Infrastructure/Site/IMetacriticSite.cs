@@ -6,7 +6,7 @@ namespace MetacriticScraper.Infrastructure.Site
     /// <summary>
     /// Game manager class for Metacritic site.
     /// </summary>
-    public interface ISite
+    public interface IMetacriticSite
     {
         /// <summary>
         /// Gets the filtered game list.

@@ -10,17 +10,17 @@ namespace MetacriticScraper.Infrastructure.Site
     /// <summary>
     /// Manages the Metacritic games using cache.
     /// </summary>
-    public class Site : ISite
+    public class MetacriticSite : IMetacriticSite
     {
         private readonly ISiteResolver siteResolver;
         private readonly IHtmlParser htmlParser;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Site"/> class.
+        /// Initializes a new instance of the <see cref="MetacriticSite"/> class.
         /// </summary>
         /// <param name="siteResolver">Site resolver.</param>
         /// <param name="htmlParser">Html parser.</param>
-        public Site(
+        public MetacriticSite(
             ISiteResolver siteResolver,
             IHtmlParser htmlParser)
         {
@@ -90,7 +90,8 @@ namespace MetacriticScraper.Infrastructure.Site
             GameFilter gameFilter,
             IList<Game> gamesInPage) =>
                 gamesInPage.Where(
-                    w => (gameFilter.MinMetaScore == null || w.MetaScore >= gameFilter.MinMetaScore) &&
+                    w => gameFilter.Platform == w.Platform &&
+                    (gameFilter.MinMetaScore == null || w.MetaScore >= gameFilter.MinMetaScore) &&
                     (gameFilter.MinReleaseDate == null || w.ReleaseDate >= gameFilter.MinReleaseDate) &&
                     (gameFilter.MinUserScore == null || w.UserScore >= gameFilter.MinUserScore));
     }

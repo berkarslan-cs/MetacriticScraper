@@ -10,12 +10,20 @@ namespace MetacriticScraper.Infrastructure.SiteResolver
     {
         private const int NumberOfRetrial = 3;
         private readonly ISiteUriResolver siteUrlFactory;
+        private readonly IHtmlWebWrapper htmlWebWrapper;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HtmlAgilitySiteResolver"/> class.
         /// </summary>
         /// <param name="siteUrlFactory">Site url factory to resolve the urls.</param>
-        public HtmlAgilitySiteResolver(ISiteUriResolver siteUrlFactory) => this.siteUrlFactory = siteUrlFactory;
+        /// <param name="htmlWebWrapper">The wrapper class for <see cref="HtmlWeb" />.</param>
+        public HtmlAgilitySiteResolver(
+            ISiteUriResolver siteUrlFactory,
+            IHtmlWebWrapper htmlWebWrapper)
+        {
+            this.siteUrlFactory = siteUrlFactory;
+            this.htmlWebWrapper = htmlWebWrapper;
+        }
 
         /// <inheritdoc />
         public IXPathNavigable GetHtmlDocument(GamePlatform gamePlatform, int pageId)
@@ -24,12 +32,11 @@ namespace MetacriticScraper.Infrastructure.SiteResolver
             return SendRequestWithRetrial(siteUriToRequest, NumberOfRetrial);
         }
 
-        private static IXPathNavigable SendRequestWithRetrial(Uri siteUriToRequest, int retrialCount)
+        private IXPathNavigable SendRequestWithRetrial(Uri siteUriToRequest, int retrialCount)
         {
             try
             {
-                var web = new HtmlWeb();
-                return web.Load(siteUriToRequest);
+                return htmlWebWrapper.Load(siteUriToRequest);
             }
             catch
             {

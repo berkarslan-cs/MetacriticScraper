@@ -22,7 +22,8 @@ namespace MetacriticScraper
         /// <param name="args">Arguments.</param>
         /// <returns>Web host builder object.</returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            WebHost
+                .CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
     }
 }

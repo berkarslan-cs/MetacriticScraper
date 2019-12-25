@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using HtmlAgilityPack;
 using MetacriticScraper.Infrastructure.HtmlParser;
 using MetacriticScraper.Infrastructure.Site;
 using MetacriticScraper.Infrastructure.SiteResolver;
@@ -38,10 +39,11 @@ namespace MetacriticScraper
 
             // DI
             services.AddTransient<IHtmlParser, MetacriticHtmlParser>();
-            services.AddTransient<ISite, Site>();
+            services.AddTransient<IMetacriticSite, MetacriticSite>();
             services.AddTransient<ISiteResolver, HtmlAgilitySiteResolver>();
             services.AddTransient<ISiteUriResolver, MetacriticSiteUriResolver>();
             services.AddTransient<IMetacriticGameConverter, MetacriticGameConverter>();
+            services.AddTransient<IHtmlWebWrapper, HtmlWebWrapper>(_ => new HtmlWebWrapper(new HtmlWeb()));
         }
 
         /// <summary>

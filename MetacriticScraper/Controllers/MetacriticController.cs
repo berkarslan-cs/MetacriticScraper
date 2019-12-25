@@ -14,13 +14,13 @@ namespace MetacriticScraper.Controllers
     public class MetacriticController : ControllerBase
     {
         private const string NotValidDateErrorMessage = "Not valid date.";
-        private readonly ISite site;
+        private readonly IMetacriticSite site;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetacriticController"/> class.
         /// </summary>
         /// <param name="site">Injected automatically.</param>
-        public MetacriticController(ISite site) => this.site = site;
+        public MetacriticController(IMetacriticSite site) => this.site = site;
 
         /// <summary>
         /// Returns all of the games which qualify the given filter.
