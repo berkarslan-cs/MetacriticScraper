@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetacriticScraper", "MetacriticScraper\MetacriticScraper.csproj", "{E2DF0157-AFF7-4715-B6D6-D3EE2E624F5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetacriticScraper.UnitTests", "MetacriticScraper.UnitTests\MetacriticScraper.UnitTests.csproj", "{06300E22-7AF3-41DA-A4DF-7D1A194B4AFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetacriticScraper.UnitTests", "MetacriticScraper.UnitTests\MetacriticScraper.UnitTests.csproj", "{06300E22-7AF3-41DA-A4DF-7D1A194B4AFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetacriticScraper.IntegrationTests", "MetacriticScraper.IntegrationTests\MetacriticScraper.IntegrationTests.csproj", "{5FFBCBB2-C9F0-4593-8ED2-FDA4974FE4FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetacriticScraper.IntegrationTests", "MetacriticScraper.IntegrationTests\MetacriticScraper.IntegrationTests.csproj", "{5FFBCBB2-C9F0-4593-8ED2-FDA4974FE4FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
