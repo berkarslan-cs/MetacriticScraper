@@ -5,7 +5,7 @@
 ## What is MetacriticScraper
 This is a scraper project for Metacritic based on .NET Core. UI will also be provided.
 
-##How to use it?
+## How to use it?
 It has a single API method, which is a GET endpoint and it accepts the following filter parameters:
 - Platform: Possible values are: 0 (PC), 1 (PS4), 2 (XBox One)
 - MinMetaScore: Metascore int type value which is between 0-100.
