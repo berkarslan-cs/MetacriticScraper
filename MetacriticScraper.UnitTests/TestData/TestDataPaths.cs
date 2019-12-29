@@ -9,7 +9,7 @@ namespace MetacriticScraper.UnitTests.TestData
             get
             {
                 var directory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-                return string.Format(@"{0}\{1}", directory, @"TestData\FirstPage.html");
+                return string.Format($@"{{0}}{Path.DirectorySeparatorChar}{{1}}", directory, $@"TestData{Path.DirectorySeparatorChar}FirstPage.html");
             }
         }
     }
