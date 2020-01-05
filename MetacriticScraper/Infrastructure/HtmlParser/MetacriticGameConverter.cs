@@ -87,7 +87,9 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         private static DateTime GetReleaseDateWithoutCorrectYear(string releaseDate)
         {
             var normalizedReleaseDate = Regex.Replace(releaseDate, MoreThanOneSpaceRegex, SpaceCharacter);
-            var releaseDateWithYear = $"{DateTime.Now.Year} {normalizedReleaseDate}";
+
+            // 2020 is set as static so that the Leap Day(29th Feb) won't throw any errors, release date will be fixed later in the code
+            var releaseDateWithYear = $"2020 {normalizedReleaseDate}";
             var parseSucceeded = DateTime.TryParseExact(
                 releaseDateWithYear,
                 DefaultReleaseDateFormat,

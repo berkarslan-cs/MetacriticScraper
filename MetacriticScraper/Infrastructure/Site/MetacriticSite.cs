@@ -37,13 +37,15 @@ namespace MetacriticScraper.Infrastructure.Site
             }
 
             var result = new List<Game>();
+            var currentYear = DateTime.Now.Year;
+            var currentMonth = DateTime.Now.Month;
             for (var pageIndex = 0; pageIndex < GetNumberOfPages(gameFilter.Platform); pageIndex++)
             {
                 var htmlDocument = siteResolver.GetHtmlDocument(gameFilter.Platform, pageIndex);
                 var gamesInPage = htmlParser.GetGames(htmlDocument, gameFilter.Platform);
 
                 // Fix year of ReleaseDate property (Metacritic doesn't include year in the page so that we need to evaluate it)
-                FixReleaseDate(gamesInPage);
+                (currentYear, currentMonth) = FixReleaseDate(gamesInPage, currentYear, currentMonth);
 
                 var filteredGames = GetFilteredGames(gameFilter, gamesInPage);
                 result.AddRange(filteredGames);
@@ -66,10 +68,11 @@ namespace MetacriticScraper.Infrastructure.Site
             return htmlParser.GetNumberOfPages(htmlDocument);
         }
 
-        private static void FixReleaseDate(IList<Game> result)
+        private static (int, int) FixReleaseDate(
+            IList<Game> result,
+            int currentYear,
+            int currentMonth)
         {
-            var currentYear = DateTime.Now.Year;
-            var currentMonth = DateTime.Now.Month;
             foreach (var game in result)
             {
                 // The following means that the month is switched from January to December which means that we're in the previous year.
@@ -84,6 +87,8 @@ namespace MetacriticScraper.Infrastructure.Site
                     game.ReleaseDateWithoutCorrectYear.Month,
                     game.ReleaseDateWithoutCorrectYear.Day);
             }
+
+            return (currentYear, currentMonth);
         }
 
         private static IEnumerable<Game> GetFilteredGames(
