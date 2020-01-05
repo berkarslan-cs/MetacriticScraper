@@ -64,6 +64,7 @@ namespace MetacriticScraper
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseStaticFiles();
 
             // Set default culture for the threads
             var cultureInfo = new CultureInfo(EnglishCultureName);
