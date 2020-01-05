@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <a class="btn btn--primary" onclick="filterGames();">
+                        <a id="filter-btn" class="btn btn--primary" onclick="filterGames();">
                             <span class="btn__text">Filter Games</span>
                         </a>
                     </div>
@@ -116,29 +116,60 @@
 
 <script>
     function filterGames() {
+        beforeFilter();
+        $
+            .getJSON(getRequestUrl(), function (result) {
+                if (result.length == 0) {
+                    appendRow(getEmptyRowHtml(this));
+                }
+                $.each(result, function () {
+                    appendRow(getRowHtml(this));
+                });
+            })
+            .always(function () {
+                afterFilter();
+            });
+    }
+
+    function beforeFilter() {
+        platformText = $('input[name="platform"]:checked').siblings('.input__label').text()
         $('#games').hide();
+        $('#games tbody').html('');
+        $('#filter-btn').addClass('disabled');
+        $('#filter-btn span').text('Loading...');
+    }
+
+    function afterFilter() {
+        $('#games').show();
+        $('#filter-btn').removeClass('disabled');
+        $('#filter-btn span').text('Filter Games');
+    }
+
+    function getEmptyRowHtml() {
+        return "<tr><td colspan='5'>No games with those filters</td></tr>";
+    }
+
+    function getRowHtml(data) {
+        return "<tr><td><a target='_blank' href='" + data.url + "'>" + data.name + "</a></td>" +
+            "<td>" + platformText + "</td>" +
+            "<td>" + data.metaScore + "</td>" +
+            "<td>" + data.userScore + "</td>" +
+            "<td>" + new Date(data.releaseDate).toLocaleDateString("en-US") + "</td></tr>"
+    }
+
+    function getRequestUrl() {
         var params = {
             Platform: $('input[name="platform"]:checked').val(),
             MinMetaScore: $('#metascore').val(),
             MinUserScore: $('#userscore').val(),
             MinReleaseDate: $('#releasedate').val(),
         };
-        var platformText = $('input[name="platform"]:checked').siblings('.input__label').text()
         var queryString = encodeQueryData(params);
-        var url = "https://localhost:44380/api/Metacritic?" + queryString;
-        $.getJSON(url, function (result) {
-            $('#games tbody').html('');
-            $.each(result, function () {
-                var tr = "<tr><td><a target='_blank' href='" + this.url + "'>" + this.name + "</a></td>" +
-                    "<td>" + platformText + "</td>" +
-                    "<td>" + this.metaScore + "</td>" +
-                    "<td>" + this.userScore + "</td>" +
-                    "<td>" + new Date(this.releaseDate).toLocaleDateString("en-US") + "</td></tr>";
-                $('#games tbody').append(tr);
-            });
+        return "https://localhost:44380/api/Metacritic?" + queryString;
+    }
 
-            $('#games').show();
-        });
+    function appendRow(tr) {
+        $('#games tbody').append(tr);
     }
 
     function encodeQueryData(data) {
@@ -148,6 +179,7 @@
                 ret.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
             }
         }
+
         return ret.join('&');
     }
 </script>
