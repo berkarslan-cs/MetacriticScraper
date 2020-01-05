@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Anasayfa | BSigner</title>
+    <title>Home | MetacriticScraper</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BSigner'ın tarayıcı bağımsız ve kolay entegre edilebilir yapısı ile dokümanlarınızı hızlı ve güvenli bir şekilde imzalayın.">
-    <link rel="shortcut icon" href="img/favicon.png" type="image/png">
+    <meta name="description" content="Filter the games according to their Metascore, User Score and Release Date">
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/stack-interface.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/socicon.css" rel="stylesheet" type="text/css" media="all" />
@@ -19,183 +18,84 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <div class="nav-container">
-        <div class="bar bar--sm visible-xs">
-            <div class="container">
-                <div class="row">
-                    <div class="col-3 col-md-2 logo-div">
-                        <a href="/">
-                            <img class="logo logo-dark" alt="logo" src="img/logo.png">
-                        </a>
-                    </div>
-                    <div class="col-9 col-md-10 text-right">
-                        <a href="#" class="hamburger-toggle" data-toggle-class="#menu1;hidden-xs">
-                            <i class="icon icon--sm stack-interface stack-menu"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <nav id="menu1" class="bar bar--sm bar-1 hidden-xs">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-1 col-md-2 hidden-xs">
-                        <div class="bar__module logo-div">
-                            <a href="/">
-                                <img class="logo logo-dark" alt="logo" src="img/logo.png">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-11 col-md-12 text-right text-left-xs text-left-sm">
-                        <div class="bar__module">
-                            <ul class="menu-horizontal text-left">
-                                <li>
-                                    <a href="/">
-                                        ANA SAYFA
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="komponent">
-                                        KOMPONENTLER
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="iletisim">
-                                        İLETİŞİM
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
     <div class="main-container">
-        <section class="cover height-80 imagebg text-center parallax" data-overlay="4">
-            <div class="background-image-holder" style="background: url(&quot;img/background.png&quot;); opacity: 1;">
-                <img alt="background" src="img/background.png">
-            </div>
+        <section class="cover height-50 imagebg text-center parallax" data-overlay="4">
             <div class="container pos-vertical-center">
                 <div class="row">
                     <div class="col-md-8 col-lg-7">
                         <h1>
-                            BSigner ile dokümanlarınızı hızlı ve güvenli bir şekilde imzalayın
+                            Filter the games according to their Metascore, User Score and Release Date
                         </h1>
-                        <p class="lead">
-                            BSigner tarayıcı bağımsız, kolay entegre edilebilir bir imzalama çözümü sunar.
-                        </p>
-                        <a class="btn btn-secondary type--uppercase" href="komponent">
-                            <span class="btn__text">
-                                Komponentler
-                            </span>
-                        </a>
                     </div>
                 </div>
             </div>
         </section>
-        <section class="elements-title space--xxs text-center">
+        <section>
             <div class="container">
-                <div class="row">
+                <form class="row">
                     <div class="col-md-6">
-                        <div class="feature feature--featured feature-5 boxed boxed--lg boxed--border">
-                            <i class="icon icon-Laptop-Tablet icon--lg"></i>
-                            <div class="feature__body">
-                                <h5>Tarayıcı Bağımsız</h5>
-                                <p>
-                                    BSigner herhangi bir tarayıcıya bağlı kalmaksızın hepsiyle (Internet Explorer, Google Chrome, Firefox, Opera, Safari ve diğerleri) uyumlu çalışabilmektedir.
-                                </p>
-                            </div>
+                        <div class="col-md-2 input-radio">
+                            <span class="input__label">PC</span>
+                            <input id="platform1" name="platform" type="radio" value="0" checked />
+                            <label for="radio-1"></label>
+                        </div>
+                        <div class="col-md-2 input-radio">
+                            <span class="input__label">PS4</span>
+                            <input id="platform2" name="platform" type="radio" value="1" />
+                            <label for="radio-1"></label>
+                        </div>
+                        <div class="col-md-2 input-radio">
+                            <span class="input__label">XBox One</span>
+                            <input id="platform3" name="platform" type="radio" value="2" />
+                            <label for="radio-1"></label>
                         </div>
                     </div>
+                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <div class="feature feature--featured feature-5 boxed boxed--lg boxed--border">
-                            <i class="icon icon-Puzzle icon--lg"></i>
-                            <div class="feature__body">
-                                <h5>Kolay Entegrasyon</h5>
-                                <p>
-                                    BSigner modülerliği ve farklı komponentleri sayesinde kolay entegre edilebilir bir yapı sunar, sizi entegrasyon süreçleri ve dokümanları ile uğraştırmaz.
-                                </p>
-                            </div>
-                        </div>
+                        <label for="metascore">Minimum Metascore (Between 0 to 100):</label>
+                        <input type="range" id="metascore" name="metascore" placeholder="Minimum Metascore (Between 0 to 100)" min="0" max="100"
+                               oninput="document.getElementById('metascore-label').innerHTML = this.value;" />
+                        <em id="metascore-label" style="font-style: normal;"></em>
                     </div>
-                </div>
-                <div class="row">
+                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <div class="feature feature--featured feature-5 boxed boxed--lg boxed--border">
-                            <i class="icon icon-Lock icon--lg"></i>
-                            <div class="feature__body">
-                                <h5>Güvenli</h5>
-                                <p>
-                                    BSigner dokümanlarınızı herhangi bir güvenlik zafiyeti oluşturmayacak şekilde imzalayarak size en güvenilir hizmeti sunar.
-                                </p>
-                            </div>
-                        </div>
+                        <label for="userscore">Minimum User Score (Between 0 to 10):</label>
+                        <input type="range" id="userscore" name="userscore" placeholder="Minimum User Score (Between 0 to 10)" min="0" max="10" step="0.1"
+                               oninput="document.getElementById('userscore-label').innerHTML = this.value;" />
+                        <em id="userscore-label" style="font-style: normal;"></em>
                     </div>
+                    <div class="col-md-6"></div>
                     <div class="col-md-6">
-                        <div class="feature feature--featured feature-5 boxed boxed--lg boxed--border">
-                            <i class="icon icon-Timer-2 icon--lg"></i>
-                            <div class="feature__body">
-                                <h5>Hızlı</h5>
-                                <p>
-                                    BSigner en güncel teknoloji altyapılarını kullanarak dokümanlarınızı olabilecek en hızlı şekilde imzalar.
-                                </p>
-                            </div>
-                        </div>
+                        <label for="releasedate">Minimum Release Date:</label>
+                        <input type="text" id="releasedate" name="releasedate" class="datepicker" placeholder="Minimum Release Date" />
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
-                        <div class="feature feature--featured feature-5 boxed boxed--lg boxed--border">
-                            <i class="icon icon-Letter-Open icon--lg"></i>
-                            <div class="feature__body">
-                                <h5>Mevzuat Uyumlu</h5>
-                                <p>
-                                    BSigner tüm imzalama işlemlerini 5070 sayılı Elektronik İmza Kanunu'na uyumlu şekilde gerçekleştirmektedir.
-                                </p>
-                            </div>
-                        </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <a class="btn btn--primary" onclick="filterGames();">
+                            <span class="btn__text">Filter Games</span>
+                        </a>
                     </div>
-                </div>
+                </form>
+                <br />
+                <table id="games" class="border--round table--alternate-row" style="display: none">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Platform</th>
+                            <th>MetaScore</th>
+                            <th>UserScore</th>
+                            <th>ReleaseDate</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </section>
         <footer class="text-center space--sm footer-5 bg--dark">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="heading-block">
-                            <ul class="list-inline list--hover">
-                                <li>
-                                    <a href="/">
-                                        <span>Ana Sayfa</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="komponent">
-                                        <span>Komponentler</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="iletisim">
-                                        <span>İletişim</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <span class="type--fine-print">
-                                ©
-                                <span class="update-year">2019</span> BSigner
-                            </span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </footer>
     </div>
-    <a class="back-to-top inner-link" href="#start" data-scroll-class="100vh:active">
-        <i class="stack-interface stack-up-open-big"></i>
-    </a>
     <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/flickity.min.js"></script>
     <script src="js/easypiechart.min.js"></script>
@@ -208,9 +108,46 @@
     <script src="js/granim.min.js"></script>
     <script src="js/jquery.steps.min.js"></script>
     <script src="js/countdown.min.js"></script>
-    <script src="js/twitterfetcher.min.js"></script>
     <script src="js/spectragram.min.js"></script>
     <script src="js/smooth-scroll.min.js"></script>
     <script src="js/scripts.js"></script>
 </body>
 </html>
+
+<script>
+    function filterGames() {
+        $('#games').hide();
+        var params = {
+            Platform: $('input[name="platform"]:checked').val(),
+            MinMetaScore: $('#metascore').val(),
+            MinUserScore: $('#userscore').val(),
+            MinReleaseDate: $('#releasedate').val(),
+        };
+        var platformText = $('input[name="platform"]:checked').siblings('.input__label').text()
+        var queryString = encodeQueryData(params);
+        var url = "https://localhost:44380/api/Metacritic?" + queryString;
+        $.getJSON(url, function (result) {
+            $('#games tbody').html('');
+            $.each(result, function () {
+                var tr = "<tr><td><a target='_blank' href='" + this.url + "'>" + this.name + "</a></td>" +
+                    "<td>" + platformText + "</td>" +
+                    "<td>" + this.metaScore + "</td>" +
+                    "<td>" + this.userScore + "</td>" +
+                    "<td>" + new Date(this.releaseDate).toLocaleDateString("en-US") + "</td></tr>";
+                $('#games tbody').append(tr);
+            });
+
+            $('#games').show();
+        });
+    }
+
+    function encodeQueryData(data) {
+        var ret = [];
+        for (var key in data) {
+            if (data[key]) {
+                ret.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
+            }
+        }
+        return ret.join('&');
+    }
+</script>
