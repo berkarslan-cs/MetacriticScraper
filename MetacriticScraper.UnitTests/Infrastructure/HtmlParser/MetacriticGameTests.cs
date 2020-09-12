@@ -11,12 +11,12 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
     public class MetacriticGameTests
     {
         [TestCase(null, null, GamePlatform.PC, null, null, null, false)]
-        [TestCase(null, "Name", GamePlatform.PC, "Dec 16", "http://sample.org", "10", false)]
-        [TestCase("100", null, GamePlatform.PC, "Dec 16", "http://sample.org", "10", false)]
+        [TestCase(null, "Name", GamePlatform.PC, "September 8, 2020", "http://sample.org", "10", false)]
+        [TestCase("100", null, GamePlatform.PC, "September 8, 2020", "http://sample.org", "10", false)]
         [TestCase("100", "Name", GamePlatform.PC, null, "http://sample.org", "10", false)]
-        [TestCase("100", "Name", GamePlatform.PC, "Dec 16", null, "10", false)]
-        [TestCase("100", "Name", GamePlatform.PC, "Dec 16", "http://sample.org", null, false)]
-        [TestCase("100", "Name", GamePlatform.PC, "Dec 16", "http://sample.org", "10", true)]
+        [TestCase("100", "Name", GamePlatform.PC, "September 8, 2020", null, "10", false)]
+        [TestCase("100", "Name", GamePlatform.PC, "September 8, 2020", "http://sample.org", null, false)]
+        [TestCase("100", "Name", GamePlatform.PC, "September 8, 2020", "http://sample.org", "10", true)]
         public void IsValid_UsingDifferentParameters_ReturnsCorrectResult(
             string metaScore,
             string name,

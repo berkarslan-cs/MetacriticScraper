@@ -157,8 +157,8 @@
     function getRowHtml(data) {
         return "<tr><td><a target='_blank' href='" + data.url + "'>" + data.name + "</a></td>" +
             "<td>" + platformText + "</td>" +
-            "<td>" + data.metaScore + "</td>" +
-            "<td>" + data.userScore + "</td>" +
+            "<td>" + (data.metaScore != null ? data.metaScore : 'TBD') + "</td>" +
+            "<td>" + (data.userScore != null ? data.userScore : 'TBD') + "</td>" +
             "<td>" + new Date(data.releaseDate).toLocaleDateString("en-US") + "</td></tr>"
     }
 

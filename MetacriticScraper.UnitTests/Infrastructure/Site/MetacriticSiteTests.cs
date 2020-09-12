@@ -22,7 +22,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             MetaScore = 100,
             Name = "1",
             Platform = GamePlatform.PC,
-            ReleaseDate = new DateTime(DateTime.Now.Year, 1, 1), // Represents YYYY-1-1
+            ReleaseDate = new DateTime(DateTime.Now.Year, 1, 1),
             Url = @"http://sample1.org",
             UserScore = 10,
         };

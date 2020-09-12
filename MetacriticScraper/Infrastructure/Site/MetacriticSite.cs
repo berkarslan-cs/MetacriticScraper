@@ -74,8 +74,8 @@ namespace MetacriticScraper.Infrastructure.Site
             IList<Game> gamesInPage) =>
                 gamesInPage.Where(
                     w => gameFilter.Platform == w.Platform &&
-                    (gameFilter.MinMetaScore == null || w.MetaScore >= gameFilter.MinMetaScore) &&
+                    (gameFilter.MinMetaScore == null || gameFilter.MinMetaScore == 0 || w.MetaScore >= gameFilter.MinMetaScore) &&
                     (gameFilter.MinReleaseDate == null || w.ReleaseDate >= gameFilter.MinReleaseDate) &&
-                    (gameFilter.MinUserScore == null || w.UserScore >= gameFilter.MinUserScore));
+                    (gameFilter.MinUserScore == null || gameFilter.MinUserScore == 0 || w.UserScore >= gameFilter.MinUserScore));
     }
 }
