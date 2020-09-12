@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
 namespace MetacriticScraper
 {
@@ -14,16 +14,19 @@ namespace MetacriticScraper
         /// Main entry.
         /// </summary>
         /// <param name="args">Arguments.</param>
-        public static void Main(string[] args) => CreateWebHostBuilder(args).Build().Run();
+        public static void Main(string[] args) => CreateHostBuilder(args).Build().Run();
 
         /// <summary>
-        /// Web host builder.
+        /// Host builder.
         /// </summary>
         /// <param name="args">Arguments.</param>
-        /// <returns>Web host builder object.</returns>
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost
+        /// <returns>Host builder object.</returns>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host
                 .CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

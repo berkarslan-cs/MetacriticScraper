@@ -7,7 +7,7 @@ namespace MetacriticScraper.Infrastructure.SiteResolver
     /// <inheritdoc />
     public class MetacriticSiteUriResolver : ISiteUriResolver
     {
-        private static readonly string MetacriticPageUrlFormat = @"/browse/games/release-date/available/{0}/date?page={1}";
+        private static readonly string MetacriticPageUrlFormat = @"/browse/games/release-date/available/{0}/date?view=condensed&page={1}";
         private static readonly Dictionary<GamePlatform, string> GamePlatformAndUrlMapping = new Dictionary<GamePlatform, string>
         {
             { GamePlatform.PC, "pc" },

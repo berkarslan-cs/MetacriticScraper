@@ -14,6 +14,7 @@ namespace MetacriticScraper.Infrastructure.Site
     {
         private readonly ISiteResolver siteResolver;
         private readonly IHtmlParser htmlParser;
+        private readonly IDictionary<GamePlatform, int> cachedNumberOfPages = new Dictionary<GamePlatform, int>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetacriticSite"/> class.
@@ -37,16 +38,10 @@ namespace MetacriticScraper.Infrastructure.Site
             }
 
             var result = new List<Game>();
-            var currentYear = DateTime.Now.Year;
-            var currentMonth = DateTime.Now.Month;
             for (var pageIndex = 0; pageIndex < GetNumberOfPages(gameFilter.Platform); pageIndex++)
             {
                 var htmlDocument = siteResolver.GetHtmlDocument(gameFilter.Platform, pageIndex);
                 var gamesInPage = htmlParser.GetGames(htmlDocument, gameFilter.Platform);
-
-                // Fix year of ReleaseDate property (Metacritic doesn't include year in the page so that we need to evaluate it)
-                (currentYear, currentMonth) = FixReleaseDate(gamesInPage, currentYear, currentMonth);
-
                 var filteredGames = GetFilteredGames(gameFilter, gamesInPage);
                 result.AddRange(filteredGames);
 
@@ -63,32 +58,15 @@ namespace MetacriticScraper.Infrastructure.Site
         /// <inheritdoc />
         public int GetNumberOfPages(GamePlatform gamePlatform)
         {
-            // Get the first page and scrape the last page id
-            var htmlDocument = siteResolver.GetHtmlDocument(gamePlatform, 0);
-            return htmlParser.GetNumberOfPages(htmlDocument);
-        }
-
-        private static (int, int) FixReleaseDate(
-            IList<Game> result,
-            int currentYear,
-            int currentMonth)
-        {
-            foreach (var game in result)
+            if (!cachedNumberOfPages.ContainsKey(gamePlatform))
             {
-                // The following means that the month is switched from January to December which means that we're in the previous year.
-                if (game.ReleaseDateWithoutCorrectYear.Month > currentMonth)
-                {
-                    currentYear--;
-                }
-
-                currentMonth = game.ReleaseDateWithoutCorrectYear.Month;
-                game.ReleaseDate = new DateTime(
-                    currentYear,
-                    game.ReleaseDateWithoutCorrectYear.Month,
-                    game.ReleaseDateWithoutCorrectYear.Day);
+                // Get the first page and scrape the last page id
+                var htmlDocument = siteResolver.GetHtmlDocument(gamePlatform, 0);
+                var numberOfPages = htmlParser.GetNumberOfPages(htmlDocument);
+                cachedNumberOfPages[gamePlatform] = numberOfPages;
             }
 
-            return (currentYear, currentMonth);
+            return cachedNumberOfPages[gamePlatform];
         }
 
         private static IEnumerable<Game> GetFilteredGames(

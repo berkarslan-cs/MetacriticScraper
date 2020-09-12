@@ -115,6 +115,11 @@
 </html>
 
 <script>
+    window.onload = function () {
+        document.getElementById('metascore-label').innerHTML = document.getElementById('metascore').value;
+        document.getElementById('userscore-label').innerHTML = document.getElementById('userscore').value;
+    }
+
     function filterGames() {
         beforeFilter();
         $

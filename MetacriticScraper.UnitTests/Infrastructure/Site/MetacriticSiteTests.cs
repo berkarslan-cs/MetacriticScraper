@@ -22,7 +22,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             MetaScore = 100,
             Name = "1",
             Platform = GamePlatform.PC,
-            ReleaseDateWithoutCorrectYear = new DateTime(DateTime.Now.Year, 1, 1), // Represents YYYY-1-1
+            ReleaseDate = new DateTime(DateTime.Now.Year, 1, 1), // Represents YYYY-1-1
             Url = @"http://sample1.org",
             UserScore = 10,
         };
@@ -32,7 +32,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             MetaScore = 63,
             Name = "2",
             Platform = GamePlatform.PC,
-            ReleaseDateWithoutCorrectYear = new DateTime(DateTime.Now.Year, 12, 31), // Represents (YYYY-1)-12-31
+            ReleaseDate = new DateTime(DateTime.Now.Year - 1, 12, 31),
             Url = @"http://sample2.org",
             UserScore = 6.3M,
         };
@@ -42,7 +42,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             MetaScore = 59,
             Name = "3",
             Platform = GamePlatform.PC,
-            ReleaseDateWithoutCorrectYear = new DateTime(DateTime.Now.Year, 1, 1), // Represents (YYYY-1)-1-1
+            ReleaseDate = new DateTime(DateTime.Now.Year - 1, 1, 1),
             Url = @"http://sample3.org",
             UserScore = 3.4M,
         };
@@ -52,7 +52,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             MetaScore = 61,
             Name = "4",
             Platform = GamePlatform.PC,
-            ReleaseDateWithoutCorrectYear = new DateTime(DateTime.Now.Year, 12, 11), // Represents (YYYY-2)-12-11
+            ReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
             Url = @"http://sample4.org",
             UserScore = 5.9M,
         };
@@ -62,7 +62,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             MetaScore = 41,
             Name = "5",
             Platform = GamePlatform.PS4,
-            ReleaseDateWithoutCorrectYear = new DateTime(DateTime.Now.Year, 12, 11), // Represents (YYYY-2)-12-11
+            ReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
             Url = @"http://sample4.org",
             UserScore = 4.1M,
         };

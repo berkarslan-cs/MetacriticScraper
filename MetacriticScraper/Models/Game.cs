@@ -35,14 +35,8 @@ namespace MetacriticScraper.Models
         public decimal? UserScore { get; set; }
 
         /// <summary>
-        /// Gets or sets release date of the game. This field gets set using <see cref="ReleaseDateWithoutCorrectYear"/> in a later point in code.
+        /// Gets or sets release date of the game.
         /// </summary>
         public DateTime ReleaseDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets release date with ignoring the year. The reason is that Metacritic doesn't show year in the page.
-        /// </summary>
-        [IgnoreDataMember]
-        public DateTime ReleaseDateWithoutCorrectYear { get; set; }
     }
 }

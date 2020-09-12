@@ -22,7 +22,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             // Assert
             result.ShouldSatisfyAllConditions(
                 () => result.ShouldNotBeNull(),
-                () => result.AbsoluteUri.ShouldBe(@"https://www.metacritic.com/browse/games/release-date/available/ps4/date?page=0"));
+                () => result.AbsoluteUri.ShouldBe(@"https://www.metacritic.com/browse/games/release-date/available/ps4/date?view=condensed&page=0"));
         }
     }
 }

@@ -11,11 +11,12 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
     /// </summary>
     public class MetacriticHtmlParser : IHtmlParser
     {
-        private const string GameListElementSelector = "//*[contains(@class, 'list_products')]/*[contains(@class, 'game_product')]";
-        private const string NameXPathSelector = ".//*[contains(@class, 'product_title')]/a";
-        private const string MetaScoreXPathSelector = ".//*[contains(@class, 'product_score')]/*[contains(@class, 'metascore_w')]";
-        private const string UserScoreXPathSelector = ".//*[contains(@class, 'product_avguserscore')]/*[contains(@class, 'textscore')]";
-        private const string ReleaseDateXPathSelector = ".//*[contains(@class, 'release_date')]/*[contains(@class, 'data')]";
+        private const string GameListElementSelector = "//tr[@class='expand_collapse']";
+        private const string NameXPathSelector = ".//td[@class='details']/a/h3";
+        private const string UrlXPathSelector = ".//td[@class='details']/a";
+        private const string MetaScoreXPathSelector = ".//td[@class='score']/a/div";
+        private const string UserScoreXPathSelector = ".//td[@class='details']//div[contains(@class, 'metascore_w')]";
+        private const string ReleaseDateXPathSelector = ".//td[@class='details']/span";
         private const string LastPageXPathSelector = "//*[contains(@class, 'last_page')]/*[contains(@class, 'page_num')]";
         private const string StructureOfWebsiteMightBeChangedErrorMessage = "The structure of the website might be changed.";
         private const string AnchorLinkHrefAttributeName = "href";
@@ -88,7 +89,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
                 Name = gameElement.SelectSingleNode(NameXPathSelector)?.InnerText,
                 Platform = gamePlatform,
                 ReleaseDate = gameElement.SelectSingleNode(ReleaseDateXPathSelector)?.InnerText,
-                Url = gameElement.SelectSingleNode(NameXPathSelector)?.GetAttributeValue(AnchorLinkHrefAttributeName, null),
+                Url = gameElement.SelectSingleNode(UrlXPathSelector)?.GetAttributeValue(AnchorLinkHrefAttributeName, null),
                 UserScore = gameElement.SelectSingleNode(UserScoreXPathSelector)?.InnerText,
             };
 

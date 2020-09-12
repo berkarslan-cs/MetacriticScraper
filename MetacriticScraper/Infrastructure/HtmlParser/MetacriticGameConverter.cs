@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using MetacriticScraper.Models;
 
 namespace MetacriticScraper.Infrastructure.HtmlParser
@@ -9,9 +8,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
     public class MetacriticGameConverter : IMetacriticGameConverter
     {
         private const string ToBeDecidedText = "tbd";
-        private const string DefaultReleaseDateFormat = "yyyy MMM d";
-        private const string MoreThanOneSpaceRegex = @"\s+";
-        private const string SpaceCharacter = " ";
+        private const string DefaultReleaseDateFormat = "MMMM d, yyyy";
         private static readonly string GameDataNotFoundErrorMessage = $"Game details cannot be got from the html document. The structure of the website might be changed.";
 
         /// <inheritdoc />
@@ -27,7 +24,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
                 MetaScore = GetMetascore(game.MetaScore),
                 Name = GetName(game.Name),
                 Platform = game.Platform,
-                ReleaseDateWithoutCorrectYear = GetReleaseDateWithoutCorrectYear(game.ReleaseDate),
+                ReleaseDate = GetReleaseDate(game.ReleaseDate),
                 Url = GetUrl(game.Url),
                 UserScore = GetUserScore(game.UserScore),
             };
@@ -84,21 +81,17 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
             return uri.AbsoluteUri;
         }
 
-        private static DateTime GetReleaseDateWithoutCorrectYear(string releaseDate)
+        private static DateTime GetReleaseDate(string releaseDate)
         {
-            var normalizedReleaseDate = Regex.Replace(releaseDate, MoreThanOneSpaceRegex, SpaceCharacter);
-
-            // 2020 is set as static so that the Leap Day(29th Feb) won't throw any errors, release date will be fixed later in the code
-            var releaseDateWithYear = $"2020 {normalizedReleaseDate}";
             var parseSucceeded = DateTime.TryParseExact(
-                releaseDateWithYear,
+                releaseDate.Trim(),
                 DefaultReleaseDateFormat,
                 CultureInfo.CurrentCulture,
                 DateTimeStyles.None,
                 out var convertedReleaseDate);
             if (!parseSucceeded)
             {
-                throw new ArgumentException($"Release date couldn't be parsed {nameof(releaseDateWithYear)}: {releaseDateWithYear}");
+                throw new ArgumentException($"Release date couldn't be parsed {nameof(releaseDate)}: {releaseDate}");
             }
 
             return convertedReleaseDate;

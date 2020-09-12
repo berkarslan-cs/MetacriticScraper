@@ -22,8 +22,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             Should.Throw<Exception>(() => converter.ConvertToGameEntity(game));
         }
 
-        [TestCase("100", "Name", GamePlatform.PC, "Dec 16", "http://sample.org", "invalid")]
-        [TestCase("invalid", "Name", GamePlatform.PC, "Dec 16", "http://sample.org", "10")]
+        [TestCase("100", "Name", GamePlatform.PC, "September 8, 2020", "http://sample.org", "invalid")]
+        [TestCase("invalid", "Name", GamePlatform.PC, "September 8, 2020", "http://sample.org", "10")]
         [TestCase("100", "Name", GamePlatform.PC, "invalid", "http://sample.org", "10")]
         public void ConvertToGameEntity_WithUnrecognizedParameters_ThrowsArgumentException(
             string metaScore,
@@ -49,8 +49,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             Should.Throw<ArgumentException>(() => converter.ConvertToGameEntity(game));
         }
 
-        [TestCase("TbD", "\r\t\nName\r\t\n", GamePlatform.PS4, "Dec 16", "/test/", "TbD", null, "Name", GamePlatform.PS4, "12-16", "https://www.metacritic.com/test/", null)]
-        [TestCase("100", "Name", GamePlatform.PS4, "Dec 16", "test", "5.5", 100, "Name", GamePlatform.PS4, "12-16", "https://www.metacritic.com/test", 5.5)]
+        [TestCase("TbD", "\r\t\nName\r\t\n", GamePlatform.PS4, "September 8, 2020", "/test/", "TbD", null, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test/", null)]
+        [TestCase("100", "Name", GamePlatform.PS4, "September 8, 2020", "test", "5.5", 100, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test", 5.5)]
         public void ConvertToGameEntity_WithValidParameters_ReturnsSuccessfully(
             string metaScore,
             string name,
@@ -61,7 +61,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             int? expectedMetaScore,
             string expectedName,
             GamePlatform expectedPlatform,
-            DateTime expectedReleaseDateWithoutCorrectYearWithoutAYear,
+            DateTime expectedReleaseDate,
             string expectedUrl,
             decimal? expectedUserScore)
         {
@@ -85,8 +85,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
                 () => result.MetaScore.ShouldBe(expectedMetaScore),
                 () => result.Name.ShouldBe(expectedName),
                 () => result.Platform.ShouldBe(expectedPlatform),
-                () => result.ReleaseDate.ShouldBe(DateTime.MinValue),
-                () => result.ReleaseDateWithoutCorrectYear.ShouldBe(expectedReleaseDateWithoutCorrectYearWithoutAYear),
+                () => result.ReleaseDate.ShouldBe(expectedReleaseDate),
                 () => result.Url.ShouldBe(expectedUrl),
                 () => result.UserScore.ShouldBe(expectedUserScore));
         }

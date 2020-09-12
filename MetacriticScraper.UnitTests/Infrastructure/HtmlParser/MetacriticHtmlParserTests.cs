@@ -34,7 +34,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
         public void GetGames_WithPreloadedHtmlFileWhichContainsTheFirstPageOfMetacritic_ShouldReturnTheGamesSuccessfully()
         {
             // Arrange
-            const int expectedCountOfGamesInFirstPage = 200;
+            const int expectedCountOfGamesInFirstPage = 100;
             var converter = new Mock<MetacriticGameConverter>();
             var parser = new MetacriticHtmlParser(converter.Object);
             var htmlDocument = new HtmlDocument();
@@ -68,7 +68,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
         public void GetNumberOfPages_WithPreloadedHtmlFileWhichContainsTheFirstPageOfMetacritic_ShouldReturnTheLastPageSuccessfully()
         {
             // Arrange
-            const int expectedLastPage = 232;
+            const int expectedLastPage = 526;
             var converter = new Mock<MetacriticGameConverter>();
             var parser = new MetacriticHtmlParser(converter.Object);
             var htmlDocument = new HtmlDocument();
