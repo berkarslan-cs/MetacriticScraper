@@ -15,3 +15,6 @@ It has a single API method, which is a GET endpoint and it accepts the following
 A sample API request url can be like the following: https://localhost:44380/api/Metacritic?Platform=0&MinMetaScore=75&MinUserScore=6.5&MinReleaseDate=2019-11-01
 
 UI can be browsed from the following url: https://localhost:44380/index.html
+
+## Sample UI
+![image](https://user-images.githubusercontent.com/45750757/93006092-b32da500-f560-11ea-8adf-e70c72dc4e51.png)
