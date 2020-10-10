@@ -10,14 +10,18 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
     public interface IHtmlParser
     {
         /// <summary>
+        /// Parses the html document for a specific game and scrapes the details.
+        /// </summary>
+        /// <param name="xPathNavigableHtmlDocument">Html document to parse.</param>
+        /// <returns>Game details.</returns>
+        Game GetGameDetails(IXPathNavigable xPathNavigableHtmlDocument);
+
+        /// <summary>
         /// Parses the html document and scrapes all of the game elements in it.
         /// </summary>
         /// <param name="xPathNavigableHtmlDocument">Html document to parse.</param>
-        /// <param name="gamePlatform">Game platform.</param>
-        /// <returns>All of the game data in the html document.</returns>
-        IList<Game> GetGames(
-            IXPathNavigable xPathNavigableHtmlDocument,
-            GamePlatform gamePlatform);
+        /// <returns>All of the game data in the html document with basic info.</returns>
+        IList<Game> GetGames(IXPathNavigable xPathNavigableHtmlDocument);
 
         /// <summary>
         /// Gets the number of pages.

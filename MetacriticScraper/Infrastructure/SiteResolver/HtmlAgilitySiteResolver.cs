@@ -26,11 +26,14 @@ namespace MetacriticScraper.Infrastructure.SiteResolver
         }
 
         /// <inheritdoc />
-        public IXPathNavigable GetHtmlDocument(GamePlatform gamePlatform, int pageId)
+        public IXPathNavigable GetMetacriticGameListHtmlDocument(GamePlatform gamePlatform, int pageId)
         {
             var siteUriToRequest = siteUrlFactory.GetSiteUrl(gamePlatform, pageId);
             return SendRequestWithRetrial(siteUriToRequest, NumberOfRetrial);
         }
+
+        /// <inheritdoc />
+        public IXPathNavigable GetGameHtmlDocument(string url) => SendRequestWithRetrial(new Uri(url), NumberOfRetrial);
 
         private IXPathNavigable SendRequestWithRetrial(Uri siteUriToRequest, int retrialCount)
         {

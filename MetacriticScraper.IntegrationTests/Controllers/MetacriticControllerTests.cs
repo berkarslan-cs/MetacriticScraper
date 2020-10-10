@@ -36,10 +36,10 @@ namespace MetacriticScraper.IntegrationTests.Controllers
         }
 
         [Test]
-        public void Get_ProvidedWithFilterParam_ShouldReturnTheGamesSuccessfully()
+        public void Get_ProvidedWithScoreFilter_ShouldReturnTheGamesSuccessfully()
         {
             // Arrange
-            var gameFilter = new GameFilter()
+            var gameFilter = new GameFilter
             {
                 MinMetaScore = 10,
                 MinReleaseDate = DateTime.Now.AddMonths(-1),
@@ -57,7 +57,35 @@ namespace MetacriticScraper.IntegrationTests.Controllers
                 () => result.Result.ShouldBeOfType<OkObjectResult>(),
                 () => games.ShouldNotBeEmpty(),
                 () => games.FirstOrDefault()?.Name?.ShouldNotBeNull(),
-                () => games.FirstOrDefault()?.Url?.ShouldNotBeNull());
+                () => games.FirstOrDefault()?.Url?.ShouldNotBeNull(),
+                () => games.FirstOrDefault()?.GameDetail?.NumberOfCriticReviews.ShouldNotBeNull());
+        }
+
+        [Test]
+        public void Get_ProvidedWithNumberOfReviewsFilter_ShouldReturnTheGamesSuccessfully()
+        {
+            // Arrange
+            var gameFilter = new GameFilter
+            {
+                MinMetaScore = 50,
+                MinNumberOfCriticReviews = 7,
+                MinReleaseDate = DateTime.Now.AddMonths(-1),
+                Platform = GamePlatform.PC,
+            };
+            var metaCriticController = new MetacriticController(serviceProvider.GetService<IMetacriticSite>());
+
+            // Act
+            var result = metaCriticController.Get(gameFilter);
+
+            // Assert
+            var games = (result.Result as OkObjectResult)?.Value as IList<Game> ?? new List<Game>();
+            result.ShouldSatisfyAllConditions(
+                () => result.Result.ShouldBeOfType<OkObjectResult>(),
+                () => games.ShouldNotBeEmpty(),
+                () => games.FirstOrDefault()?.Name?.ShouldNotBeNull(),
+                () => games.FirstOrDefault()?.Url?.ShouldNotBeNull(),
+                () => games.FirstOrDefault()?.GameDetail?.NumberOfCriticReviews.ShouldNotBeNull(),
+                () => games.ShouldAllBe(s => s.GameDetail.NumberOfCriticReviews >= 7));
         }
     }
 }

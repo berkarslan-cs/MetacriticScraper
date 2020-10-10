@@ -1,3 +1,4 @@
+using System;
 using MetacriticScraper.Controllers;
 using MetacriticScraper.Infrastructure.Site;
 using MetacriticScraper.Models;
@@ -19,7 +20,7 @@ namespace Tests.Controllers
             // Arrange
             var siteMock = new Mock<IMetacriticSite>();
             var controller = new MetacriticController(siteMock.Object);
-            var gameFilter = new GameFilter()
+            var gameFilter = new GameFilter
             {
                 MinMetaScore = 101,
             };
@@ -38,7 +39,10 @@ namespace Tests.Controllers
             // Arrange
             var siteMock = new Mock<IMetacriticSite>();
             var controller = new MetacriticController(siteMock.Object);
-            var gameFilter = new GameFilter();
+            var gameFilter = new GameFilter
+            {
+                MinReleaseDate = DateTime.Now,
+            };
 
             // Act
             var result = controller.Get(gameFilter);

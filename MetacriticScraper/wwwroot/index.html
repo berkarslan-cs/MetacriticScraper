@@ -66,6 +66,13 @@
                     </div>
                     <div class="col-md-6"></div>
                     <div class="col-md-6">
+                        <label for="criticcount">Minimum Number of Critic Reviews (Between 0 to 100):</label>
+                        <input type="range" id="criticcount" name="criticcount" placeholder="Minimum Number of Critic Reviews (Between 0 to 100)" min="0" max="100" step="1"
+                               oninput="document.getElementById('criticcount-label').innerHTML = this.value;" />
+                        <em id="criticcount-label" style="font-style: normal;"></em>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
                         <label for="releasedate">Minimum Release Date:</label>
                         <input type="text" id="releasedate" name="releasedate" class="datepicker" placeholder="Minimum Release Date" />
                     </div>
@@ -80,9 +87,11 @@
                 <table id="games" class="border--round table--alternate-row" style="display: none">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Platform</th>
                             <th>MetaScore</th>
+                            <th>Name</th>
+                            <th>Number of Critic Reviews</th>
+                            <th>Number of User Reviews</th>
+                            <th>Platform</th>
                             <th>UserScore</th>
                             <th>ReleaseDate</th>
                         </tr>
@@ -118,6 +127,7 @@
     window.onload = function () {
         document.getElementById('metascore-label').innerHTML = document.getElementById('metascore').value;
         document.getElementById('userscore-label').innerHTML = document.getElementById('userscore').value;
+        document.getElementById('criticcount-label').innerHTML = document.getElementById('criticcount').value;
     }
 
     function filterGames() {
@@ -133,6 +143,9 @@
             })
             .always(function () {
                 afterFilter();
+            })
+            .fail(function () {
+                alert('An error has occured!!');
             });
     }
 
@@ -151,15 +164,17 @@
     }
 
     function getEmptyRowHtml() {
-        return "<tr><td colspan='5'>No games with those filters</td></tr>";
+        return '<tr><td colspan="5">No games with those filters</td></tr>';
     }
 
     function getRowHtml(data) {
-        return "<tr><td><a target='_blank' href='" + data.url + "'>" + data.name + "</a></td>" +
-            "<td>" + platformText + "</td>" +
-            "<td>" + (data.metaScore != null ? data.metaScore : 'TBD') + "</td>" +
-            "<td>" + (data.userScore != null ? data.userScore : 'TBD') + "</td>" +
-            "<td>" + new Date(data.releaseDate).toLocaleDateString("en-US") + "</td></tr>"
+        return '<tr><td>' + (data.metaScore != null ? data.metaScore : 'TBD') + '</td>' +
+            '<td><a target="_blank" href="' + data.url + '">' + data.name + '</a></td>' +
+            '<td>' + ((data.gameDetail.numberOfCriticReviews != null && data.gameDetail.numberOfCriticReviews != 0) ? data.gameDetail.numberOfCriticReviews : 'No score yet') + '</td>' +
+            '<td>' + ((data.gameDetail.numberOfUserReviews != null && data.gameDetail.numberOfUserReviews != 0) ? data.gameDetail.numberOfUserReviews : 'No user score yet') + '</td>' +
+            '<td>' + platformText + '</td>' +
+            '<td>' + (data.userScore != null ? data.userScore : 'TBD') + '</td>' +
+            '<td>' + new Date(data.releaseDate).toLocaleDateString('en-US') + '</td></tr>'
     }
 
     function getRequestUrl() {
@@ -167,10 +182,11 @@
             Platform: $('input[name="platform"]:checked').val(),
             MinMetaScore: $('#metascore').val(),
             MinUserScore: $('#userscore').val(),
+            MinNumberOfCriticReviews: $('#criticcount').val(),
             MinReleaseDate: $('#releasedate').val(),
         };
         var queryString = encodeQueryData(params);
-        return "https://localhost:44380/api/Metacritic?" + queryString;
+        return 'https://localhost:44380/api/Metacritic?' + queryString;
     }
 
     function appendRow(tr) {

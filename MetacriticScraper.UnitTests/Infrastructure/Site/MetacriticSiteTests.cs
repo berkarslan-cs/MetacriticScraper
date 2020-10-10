@@ -16,64 +16,146 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
     /// </summary>
     public class MetacriticSiteTests
     {
+        private const string Game1Url = @"http://sample1.org";
+        private const string Game2Url = @"http://sample2.org";
+        private const string Game3Url = @"http://sample3.org";
+        private const string Game4Url = @"http://sample4.org";
+        private const string Game5Url = @"http://sample5.org";
 #pragma warning disable SA1311 // Static readonly fields should begin with upper-case letter
-        private static readonly Game game1 = new Game()
+        private static readonly Game game1 = new Game
         {
             MetaScore = 100,
             Name = "1",
             Platform = GamePlatform.PC,
             ReleaseDate = new DateTime(DateTime.Now.Year, 1, 1),
-            Url = @"http://sample1.org",
+            Url = Game1Url,
             UserScore = 10,
         };
 
-        private static readonly Game game2 = new Game()
+        private static readonly Game game2 = new Game
         {
             MetaScore = 63,
             Name = "2",
             Platform = GamePlatform.PC,
             ReleaseDate = new DateTime(DateTime.Now.Year - 1, 12, 31),
-            Url = @"http://sample2.org",
+            Url = Game2Url,
             UserScore = 6.3M,
         };
 
-        private static readonly Game game3 = new Game()
+        private static readonly Game game3 = new Game
         {
             MetaScore = 59,
             Name = "3",
             Platform = GamePlatform.PC,
             ReleaseDate = new DateTime(DateTime.Now.Year - 1, 1, 1),
-            Url = @"http://sample3.org",
+            Url = Game3Url,
             UserScore = 3.4M,
         };
 
-        private static readonly Game game4 = new Game()
+        private static readonly Game game4 = new Game
         {
             MetaScore = 61,
             Name = "4",
             Platform = GamePlatform.PC,
             ReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
-            Url = @"http://sample4.org",
+            Url = Game4Url,
             UserScore = 5.9M,
         };
 
-        private static readonly Game game5 = new Game()
+        private static readonly Game game5 = new Game
         {
             MetaScore = 41,
             Name = "5",
             Platform = GamePlatform.PS4,
             ReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
-            Url = @"http://sample4.org",
+            Url = Game5Url,
             UserScore = 4.1M,
         };
 
-        private static readonly IList<Game> games = new List<Game>()
+        private static readonly IList<Game> games = new List<Game>
         {
             game1,
             game2,
             game3,
             game4,
             game5,
+        };
+
+        private static readonly Game gameWithDetail1 = new Game
+        {
+            MetaScore = 100,
+            Name = "1",
+            Platform = GamePlatform.PC,
+            ReleaseDate = new DateTime(DateTime.Now.Year, 1, 1),
+            Url = Game1Url,
+            UserScore = 10,
+            GameDetail = new GameDetail
+            {
+                NumberOfCriticReviews = 7,
+                NumberOfUserReviews = 10,
+            },
+        };
+
+        private static readonly Game gameWithDetail2 = new Game
+        {
+            MetaScore = 63,
+            Name = "2",
+            Platform = GamePlatform.PC,
+            ReleaseDate = new DateTime(DateTime.Now.Year - 1, 12, 31),
+            Url = Game2Url,
+            UserScore = 6.3M,
+            GameDetail = new GameDetail
+            {
+                NumberOfUserReviews = 10,
+            },
+        };
+
+        private static readonly Game gameWithDetail3 = new Game
+        {
+            MetaScore = 59,
+            Name = "3",
+            Platform = GamePlatform.PC,
+            ReleaseDate = new DateTime(DateTime.Now.Year - 1, 1, 1),
+            Url = Game3Url,
+            UserScore = 3.4M,
+            GameDetail = new GameDetail
+            {
+                NumberOfCriticReviews = 7,
+            },
+        };
+
+        private static readonly Game gameWithDetail4 = new Game
+        {
+            MetaScore = 61,
+            Name = "4",
+            Platform = GamePlatform.PC,
+            ReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
+            Url = Game4Url,
+            UserScore = 5.9M,
+            GameDetail = new GameDetail
+            {
+                NumberOfCriticReviews = 7,
+                NumberOfUserReviews = 3,
+            },
+        };
+
+        private static readonly Game gameWithDetail5 = new Game
+        {
+            MetaScore = 41,
+            Name = "5",
+            Platform = GamePlatform.PS4,
+            ReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
+            Url = Game5Url,
+            UserScore = 4.1M,
+        };
+
+        private static readonly IList<Game> gamesWithDetail = new List<Game>
+        {
+            gameWithDetail1,
+            gameWithDetail2,
+            gameWithDetail3,
+            gameWithDetail4,
+            gameWithDetail5,
         };
 #pragma warning restore SA1311 // Static readonly fields should begin with upper-case letter
 
@@ -98,14 +180,47 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             var siteResolverMock = new Mock<ISiteResolver>();
             var htmlParserMock = new Mock<IHtmlParser>();
             var site = new MetacriticSite(siteResolverMock.Object, htmlParserMock.Object);
+            var game1HtmlDoc = new Mock<IXPathNavigable>();
+            var game2HtmlDoc = new Mock<IXPathNavigable>();
+            var game3HtmlDoc = new Mock<IXPathNavigable>();
+            var game4HtmlDoc = new Mock<IXPathNavigable>();
+            var game5HtmlDoc = new Mock<IXPathNavigable>();
             htmlParserMock
                 .Setup(s => s.GetNumberOfPages(It.IsAny<IXPathNavigable>()))
                 .Returns(1);
             htmlParserMock
-                .Setup(s => s.GetGames(
-                    It.IsAny<IXPathNavigable>(),
-                    It.IsAny<GamePlatform>()))
+                .Setup(s => s.GetGames(It.IsAny<IXPathNavigable>()))
                 .Returns(games);
+            siteResolverMock
+                .Setup(s => s.GetGameHtmlDocument(Game1Url))
+                .Returns(game1HtmlDoc.Object);
+            siteResolverMock
+                .Setup(s => s.GetGameHtmlDocument(Game2Url))
+                .Returns(game2HtmlDoc.Object);
+            siteResolverMock
+                .Setup(s => s.GetGameHtmlDocument(Game3Url))
+                .Returns(game3HtmlDoc.Object);
+            siteResolverMock
+                .Setup(s => s.GetGameHtmlDocument(Game4Url))
+                .Returns(game4HtmlDoc.Object);
+            siteResolverMock
+                .Setup(s => s.GetGameHtmlDocument(Game5Url))
+                .Returns(game5HtmlDoc.Object);
+            htmlParserMock
+                .Setup(s => s.GetGameDetails(game1HtmlDoc.Object))
+                .Returns(gamesWithDetail[0]);
+            htmlParserMock
+                .Setup(s => s.GetGameDetails(game2HtmlDoc.Object))
+                .Returns(gamesWithDetail[1]);
+            htmlParserMock
+                .Setup(s => s.GetGameDetails(game3HtmlDoc.Object))
+                .Returns(gamesWithDetail[2]);
+            htmlParserMock
+                .Setup(s => s.GetGameDetails(game4HtmlDoc.Object))
+                .Returns(gamesWithDetail[3]);
+            htmlParserMock
+                .Setup(s => s.GetGameDetails(game5HtmlDoc.Object))
+                .Returns(gamesWithDetail[4]);
 
             // Act
             var result = site.GetGames(gameFilter);
@@ -121,10 +236,10 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 new GameFilter(),
                 new Game[]
                 {
-                    game1,
-                    game2,
-                    game3,
-                    game4,
+                    gameWithDetail1,
+                    gameWithDetail2,
+                    gameWithDetail3,
+                    gameWithDetail4,
                 },
             };
             yield return new object[]
@@ -135,11 +250,12 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                     MinReleaseDate = new DateTime(DateTime.Now.Year - 1, 12, 31),
                     MinUserScore = 6.3M,
                     Platform = GamePlatform.PC,
+                    MinNumberOfUserReviews = 10,
                 },
                 new Game[]
                 {
-                    game1,
-                    game2,
+                    gameWithDetail1,
+                    gameWithDetail2,
                 },
             };
             yield return new object[]
@@ -150,12 +266,13 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                     MinReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
                     MinUserScore = 5.9M,
                     Platform = GamePlatform.PC,
+                    MinNumberOfUserReviews = 3,
                 },
                 new Game[]
                 {
-                    game1,
-                    game2,
-                    game4,
+                    gameWithDetail1,
+                    gameWithDetail2,
+                    gameWithDetail4,
                 },
             };
             yield return new object[]
@@ -167,7 +284,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 },
                 new Game[]
                 {
-                    game5,
+                    gameWithDetail5,
                 },
             };
         }

@@ -38,5 +38,10 @@ namespace MetacriticScraper.Models
         /// Gets or sets release date of the game.
         /// </summary>
         public DateTime ReleaseDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the details of the game.
+        /// </summary>
+        public GameDetail GameDetail { get; set; }
     }
 }

@@ -25,9 +25,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             IXPathNavigable htmlDocument = null;
 
             // Act & Assert
-            Should.Throw<ArgumentNullException>(() => parser.GetGames(
-                htmlDocument,
-                GamePlatform.PC));
+            Should.Throw<ArgumentNullException>(() => parser.GetGames(htmlDocument));
         }
 
         [Test]
@@ -42,9 +40,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             htmlDocument.LoadHtml(html);
 
             // Act
-            var result = parser.GetGames(
-                htmlDocument,
-                GamePlatform.PC);
+            var result = parser.GetGames(htmlDocument);
 
             // Assert
             result.ShouldSatisfyAllConditions(
@@ -80,6 +76,45 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
 
             // Assert
             result.ShouldBe(expectedLastPage);
+        }
+
+        [Test]
+        public void GetGameDetails_WithWrongTypeOfHtmlDocument_ShouldThrowException()
+        {
+            // Arrange
+            var converter = new Mock<MetacriticGameConverter>();
+            var parser = new MetacriticHtmlParser(converter.Object);
+            IXPathNavigable htmlDocument = null;
+
+            // Act & Assert
+            Should.Throw<ArgumentNullException>(() => parser.GetGameDetails(htmlDocument));
+        }
+
+        [Test]
+        public void GetGameDetails_WithPreloadedHtmlFileWhichContainsAGame_ShouldReturnTheGameDetailsSuccessfully()
+        {
+            // Arrange
+            var converter = new Mock<MetacriticGameConverter>();
+            var parser = new MetacriticHtmlParser(converter.Object);
+            var htmlDocument = new HtmlDocument();
+            var html = File.ReadAllText(TestDataPaths.SampleGameHtml);
+            htmlDocument.LoadHtml(html);
+
+            // Act
+            var result = parser.GetGameDetails(htmlDocument);
+
+            // Assert
+            result.ShouldSatisfyAllConditions(
+                () => result.ShouldNotBeNull(),
+                () => result.GameDetail.ShouldNotBeNull(),
+                () => result.MetaScore.ShouldBe(94),
+                () => result.Name.ShouldBe("Factorio"),
+                () => result.Platform.ShouldBe(GamePlatform.PC),
+                () => result.ReleaseDate.ShouldBe(new DateTime(2020, 08, 14)),
+                () => result.Url.ShouldBe(@"https://www.metacritic.com/game/pc/factorio"),
+                () => result.UserScore.ShouldBe(9.7M),
+                () => result.GameDetail.NumberOfCriticReviews.ShouldBe(4),
+                () => result.GameDetail.NumberOfUserReviews.ShouldBe(190));
         }
     }
 }

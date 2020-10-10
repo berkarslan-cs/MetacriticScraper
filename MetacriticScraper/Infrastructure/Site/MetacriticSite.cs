@@ -40,8 +40,8 @@ namespace MetacriticScraper.Infrastructure.Site
             var result = new List<Game>();
             for (var pageIndex = 0; pageIndex < GetNumberOfPages(gameFilter.Platform); pageIndex++)
             {
-                var htmlDocument = siteResolver.GetHtmlDocument(gameFilter.Platform, pageIndex);
-                var gamesInPage = htmlParser.GetGames(htmlDocument, gameFilter.Platform);
+                var htmlDocument = siteResolver.GetMetacriticGameListHtmlDocument(gameFilter.Platform, pageIndex);
+                var gamesInPage = htmlParser.GetGames(htmlDocument);
                 var filteredGames = GetFilteredGames(gameFilter, gamesInPage);
                 result.AddRange(filteredGames);
 
@@ -52,6 +52,17 @@ namespace MetacriticScraper.Infrastructure.Site
                 }
             }
 
+            // Get each game's details (Metacritic count etc.)
+            for (var index = 0; index < result.Count; index++)
+            {
+                var game = result[index];
+                var htmlDocument = siteResolver.GetGameHtmlDocument(game.Url);
+                var gameWithDetails = htmlParser.GetGameDetails(htmlDocument);
+                result[index] = gameWithDetails;
+            }
+
+            // Apply advanced filtering
+            result = GetDetailedFilteredGames(gameFilter, result).ToList();
             return result;
         }
 
@@ -61,7 +72,7 @@ namespace MetacriticScraper.Infrastructure.Site
             if (!cachedNumberOfPages.ContainsKey(gamePlatform))
             {
                 // Get the first page and scrape the last page id
-                var htmlDocument = siteResolver.GetHtmlDocument(gamePlatform, 0);
+                var htmlDocument = siteResolver.GetMetacriticGameListHtmlDocument(gamePlatform, 0);
                 var numberOfPages = htmlParser.GetNumberOfPages(htmlDocument);
                 cachedNumberOfPages[gamePlatform] = numberOfPages;
             }
@@ -77,5 +88,17 @@ namespace MetacriticScraper.Infrastructure.Site
                     (gameFilter.MinMetaScore == null || gameFilter.MinMetaScore == 0 || w.MetaScore >= gameFilter.MinMetaScore) &&
                     (gameFilter.MinReleaseDate == null || w.ReleaseDate >= gameFilter.MinReleaseDate) &&
                     (gameFilter.MinUserScore == null || gameFilter.MinUserScore == 0 || w.UserScore >= gameFilter.MinUserScore));
+
+        private static IEnumerable<Game> GetDetailedFilteredGames(
+            GameFilter gameFilter,
+            IList<Game> gamesInPage) =>
+                GetFilteredGames(gameFilter, gamesInPage)
+                    .Where(
+                        w => (gameFilter.MinNumberOfCriticReviews == null ||
+                            gameFilter.MinNumberOfCriticReviews == 0 ||
+                            w.GameDetail.NumberOfCriticReviews >= gameFilter.MinNumberOfCriticReviews) &&
+                        (gameFilter.MinNumberOfUserReviews == null ||
+                            gameFilter.MinNumberOfUserReviews == 0 ||
+                            w.GameDetail.NumberOfUserReviews >= gameFilter.MinNumberOfUserReviews));
     }
 }

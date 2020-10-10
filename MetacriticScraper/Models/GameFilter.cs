@@ -30,5 +30,17 @@ namespace MetacriticScraper.Models
         /// Gets or sets the platform filter.
         /// </summary>
         public DateTime? MinReleaseDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minimum number of critic reviews.
+        /// </summary>
+        [Range(0, 100)]
+        public int? MinNumberOfCriticReviews { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minimum number of user reviews.
+        /// </summary>
+        [Range(0, 10000)]
+        public int? MinNumberOfUserReviews { get; set; }
     }
 }

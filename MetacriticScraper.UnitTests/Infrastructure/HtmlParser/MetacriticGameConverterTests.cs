@@ -22,20 +22,20 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             Should.Throw<Exception>(() => converter.ConvertToGameEntity(game));
         }
 
-        [TestCase("100", "Name", GamePlatform.PC, "September 8, 2020", "http://sample.org", "invalid")]
-        [TestCase("invalid", "Name", GamePlatform.PC, "September 8, 2020", "http://sample.org", "10")]
-        [TestCase("100", "Name", GamePlatform.PC, "invalid", "http://sample.org", "10")]
+        [TestCase("100", "Name", "PC", "September 8, 2020", "http://sample.org", "invalid")]
+        [TestCase("invalid", "Name", "PC", "September 8, 2020", "http://sample.org", "10")]
+        [TestCase("100", "Name", "PC", "invalid", "http://sample.org", "10")]
         public void ConvertToGameEntity_WithUnrecognizedParameters_ThrowsArgumentException(
             string metaScore,
             string name,
-            GamePlatform platform,
+            string platform,
             string releaseDate,
             string url,
             string userScore)
         {
             // Arrange
             var converter = new MetacriticGameConverter();
-            var game = new MetacriticGame()
+            var game = new MetacriticGame
             {
                 MetaScore = metaScore,
                 Name = name,
@@ -49,25 +49,30 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             Should.Throw<ArgumentException>(() => converter.ConvertToGameEntity(game));
         }
 
-        [TestCase("TbD", "\r\t\nName\r\t\n", GamePlatform.PS4, "September 8, 2020", "/test/", "TbD", null, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test/", null)]
-        [TestCase("100", "Name", GamePlatform.PS4, "September 8, 2020", "test", "5.5", 100, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test", 5.5)]
+        [TestCase("TbD", "\r\t\nName\r\t\n", "PS4", "September 8, 2020", "/test/", "TbD", null, null, null, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test/", null, null, null)]
+        [TestCase("TbD", "\r\t\nName\r\t\n", "PlayStation 4", "September 8, 2020", "/test/", "TbD", "", null, null, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test/", null, null, null)]
+        [TestCase("100", "Name", "PS4", "September 8, 2020", "test", "5.5", "3", "4", 100, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test", 5.5, 3, 4)]
         public void ConvertToGameEntity_WithValidParameters_ReturnsSuccessfully(
             string metaScore,
             string name,
-            GamePlatform platform,
+            string platform,
             string releaseDate,
             string url,
             string userScore,
+            string numberOfCriticReviews,
+            string numberOfUserReviews,
             int? expectedMetaScore,
             string expectedName,
             GamePlatform expectedPlatform,
             DateTime expectedReleaseDate,
             string expectedUrl,
-            decimal? expectedUserScore)
+            decimal? expectedUserScore,
+            int? expectedNumberOfCriticReviews,
+            int? expectedNumberOfUserReviews)
         {
             // Arrange
             var converter = new MetacriticGameConverter();
-            var game = new MetacriticGame()
+            var game = new MetacriticGame
             {
                 MetaScore = metaScore,
                 Name = name,
@@ -75,6 +80,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
                 ReleaseDate = releaseDate,
                 Url = url,
                 UserScore = userScore,
+                NumberOfCriticReviews = numberOfCriticReviews,
+                NumberOfUserReviews = numberOfUserReviews,
             };
 
             // Act
@@ -87,7 +94,9 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
                 () => result.Platform.ShouldBe(expectedPlatform),
                 () => result.ReleaseDate.ShouldBe(expectedReleaseDate),
                 () => result.Url.ShouldBe(expectedUrl),
-                () => result.UserScore.ShouldBe(expectedUserScore));
+                () => result.UserScore.ShouldBe(expectedUserScore),
+                () => result.GameDetail?.NumberOfCriticReviews.ShouldBe(expectedNumberOfCriticReviews),
+                () => result.GameDetail?.NumberOfUserReviews.ShouldBe(expectedNumberOfUserReviews));
         }
     }
 }
