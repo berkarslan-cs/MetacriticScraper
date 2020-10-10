@@ -17,4 +17,4 @@ A sample API request url can be like the following: https://localhost:44380/api/
 UI can be browsed from the following url: https://localhost:44380/index.html
 
 ## Sample UI
-![image](https://user-images.githubusercontent.com/45750757/93006092-b32da500-f560-11ea-8adf-e70c72dc4e51.png)
+![image](https://user-images.githubusercontent.com/14029115/95655323-13d3e180-0b0f-11eb-86a3-380df57b3bb3.png)
