@@ -32,7 +32,7 @@ namespace MetacriticScraper.Controllers
         public ActionResult<IList<Game>> Get([FromQuery]GameFilter gameFilter)
         {
             // Validate input
-            if (gameFilter?.MinReleaseDate > DateTime.Now)
+            if (gameFilter?.MinReleaseDate == null || gameFilter?.MinReleaseDate > DateTime.Now)
             {
                 ModelState.AddModelError(nameof(gameFilter.MinReleaseDate), NotValidDateErrorMessage);
             }

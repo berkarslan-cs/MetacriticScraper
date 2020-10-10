@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text.RegularExpressions;
 using MetacriticScraper.Models;
 
 namespace MetacriticScraper.Infrastructure.HtmlParser
@@ -8,30 +11,64 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
     public class MetacriticGameConverter : IMetacriticGameConverter
     {
         private const string ToBeDecidedText = "tbd";
-        private const string DefaultReleaseDateFormat = "MMMM d, yyyy";
+        private const string LongMonthReleaseDateFormat = "MMMM d, yyyy";
+        private const string MidLengthedMonthReleaseDateFormat = "MMM d, yyyy";
+        private const string RegexPatternForMultipleSpaces = "[ ]{2,}";
         private static readonly string GameDataNotFoundErrorMessage = $"Game details cannot be got from the html document. The structure of the website might be changed.";
+        private static readonly Dictionary<GamePlatform?, IList<string>> PlatformStringMappings = new Dictionary<GamePlatform?, IList<string>>
+        {
+            {
+                GamePlatform.PC,
+                new List<string>
+                {
+                    "PC",
+                }
+            },
+            {
+                GamePlatform.PS4,
+                new List<string>
+                {
+                    "PS4",
+                    "PlayStation 4",
+                }
+            },
+            {
+                GamePlatform.XBoxOne,
+                new List<string>
+                {
+                    "Xbox One",
+                }
+            },
+        };
 
         /// <inheritdoc />
-        public Game ConvertToGameEntity(MetacriticGame game)
+        public Game ConvertToGameEntity(
+            MetacriticGame game,
+            bool detailPageValidation = false)
         {
-            if (!game.IsValid())
+            if (!game.IsValid(detailPageValidation))
             {
                 throw new Exception(GameDataNotFoundErrorMessage);
             }
 
-            return new Game()
+            return new Game
             {
                 MetaScore = GetMetascore(game.MetaScore),
                 Name = GetName(game.Name),
-                Platform = game.Platform,
+                Platform = GetPlatform(game.Platform),
                 ReleaseDate = GetReleaseDate(game.ReleaseDate),
                 Url = GetUrl(game.Url),
                 UserScore = GetUserScore(game.UserScore),
+                GameDetail = new GameDetail
+                {
+                    NumberOfCriticReviews = GetNumberOfCriticReviews(game.NumberOfCriticReviews),
+                    NumberOfUserReviews = GetNumberOfUserReviews(game.NumberOfUserReviews),
+                },
             };
         }
 
-        private static string GetName(string name) =>
-            name.Trim(new char[]
+        private static string TrimTabNewLineSpaces(string toBeTrimmedString) =>
+            toBeTrimmedString.Trim(new char[]
             {
                 '\r',
                 '\n',
@@ -39,9 +76,55 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
                 ' ',
             });
 
+        private static int? GetNumberOfCriticReviews(string numberOfCriticReviews)
+        {
+            if (string.IsNullOrWhiteSpace(numberOfCriticReviews))
+            {
+                return null;
+            }
+
+            var parsed = int.TryParse(TrimTabNewLineSpaces(numberOfCriticReviews), out var reviewCountInt);
+            if (!parsed)
+            {
+                throw new Exception(GameDataNotFoundErrorMessage);
+            }
+
+            return reviewCountInt;
+        }
+
+        private static int? GetNumberOfUserReviews(string numberOfUserReviews)
+        {
+            if (string.IsNullOrWhiteSpace(numberOfUserReviews))
+            {
+                return null;
+            }
+
+            var reviewCount = new string(
+                TrimTabNewLineSpaces(numberOfUserReviews)
+                    .TakeWhile(t => !t.Equals(' '))
+                    .ToArray());
+            var parsed = int.TryParse(reviewCount, out var reviewCountInt);
+            if (!parsed)
+            {
+                throw new Exception(GameDataNotFoundErrorMessage);
+            }
+
+            return reviewCountInt;
+        }
+
+        private static GamePlatform GetPlatform(string platform)
+        {
+            var gamePlatform = PlatformStringMappings
+                .FirstOrDefault(f => f.Value.Contains(TrimTabNewLineSpaces(platform)))
+                .Key;
+            return gamePlatform ?? throw new Exception(GameDataNotFoundErrorMessage);
+        }
+
+        private static string GetName(string name) => TrimTabNewLineSpaces(name);
+
         private static decimal? GetUserScore(string userScore)
         {
-            if (userScore.Equals(ToBeDecidedText, StringComparison.InvariantCultureIgnoreCase))
+            if (string.IsNullOrWhiteSpace(userScore) || userScore.Equals(ToBeDecidedText, StringComparison.InvariantCultureIgnoreCase))
             {
                 return null;
             }
@@ -59,7 +142,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
 
         private static int? GetMetascore(string metaScore)
         {
-            if (metaScore.Equals(ToBeDecidedText, StringComparison.InvariantCultureIgnoreCase))
+            if (string.IsNullOrWhiteSpace(metaScore) || metaScore.Equals(ToBeDecidedText, StringComparison.InvariantCultureIgnoreCase))
             {
                 return null;
             }
@@ -83,12 +166,22 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
 
         private static DateTime GetReleaseDate(string releaseDate)
         {
+            // Trim the release date in a way that multiple spaces in the middle of the release date will get replaced with one.
+            var pattern = new Regex(RegexPatternForMultipleSpaces);
+            releaseDate = pattern.Replace(releaseDate.Trim(), " ");
+
             var parseSucceeded = DateTime.TryParseExact(
-                releaseDate.Trim(),
-                DefaultReleaseDateFormat,
+                releaseDate,
+                LongMonthReleaseDateFormat,
                 CultureInfo.CurrentCulture,
                 DateTimeStyles.None,
-                out var convertedReleaseDate);
+                out var convertedReleaseDate) ||
+                DateTime.TryParseExact(
+                releaseDate,
+                MidLengthedMonthReleaseDateFormat,
+                CultureInfo.CurrentCulture,
+                DateTimeStyles.None,
+                out convertedReleaseDate);
             if (!parseSucceeded)
             {
                 throw new ArgumentException($"Release date couldn't be parsed {nameof(releaseDate)}: {releaseDate}");
