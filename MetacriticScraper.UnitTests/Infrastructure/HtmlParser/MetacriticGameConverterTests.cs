@@ -49,9 +49,9 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             Should.Throw<ArgumentException>(() => converter.ConvertToGameEntity(game));
         }
 
-        [TestCase("TbD", "\r\t\nName\r\t\n", "PS4", "September 8, 2020", "/test/", "TbD", null, null, null, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test/", null, null, null)]
-        [TestCase("TbD", "\r\t\nName\r\t\n", "PlayStation 4", "September 8, 2020", "/test/", "TbD", "", null, null, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test/", null, null, null)]
-        [TestCase("100", "Name", "PS4", "September 8, 2020", "test", "5.5", "3", "4", 100, "Name", GamePlatform.PS4, "09-08", "https://www.metacritic.com/test", 5.5, 3, 4)]
+        [TestCase("TbD", "\r\t\nName\r\t\n", "PS4", "September 8, 2020", "/test/", "TbD", null, null, null, "Name", GamePlatform.PS4, "2020-09-08", "https://www.metacritic.com/test/", null, null, null)]
+        [TestCase("TbD", "\r\t\nName\r\t\n", "PlayStation 4", "September 8, 2020", "/test/", "TbD", "", null, null, "Name", GamePlatform.PS4, "2020-09-08", "https://www.metacritic.com/test/", null, null, null)]
+        [TestCase("100", "Name", "PS4", "September 8, 2020", "test", "5.5", "3", "4", 100, "Name", GamePlatform.PS4, "2020-09-08", "https://www.metacritic.com/test", 5.5, 3, 4)]
         public void ConvertToGameEntity_WithValidParameters_ReturnsSuccessfully(
             string metaScore,
             string name,
