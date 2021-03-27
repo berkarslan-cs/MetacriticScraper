@@ -13,6 +13,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
     /// </summary>
     public class HtmlAgilitySiteResolverTests
     {
+        private const string NotEmptyText = "NotEmpty";
+
         [Test]
         public void GetMetacriticGameListHtmlDocument_ForPCEndpoint_ReturnsSuccessfully()
         {
@@ -26,6 +28,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             htmlWebWrapper
                 .Setup(s => s.Load(It.IsAny<Uri>()))
                 .Returns(expectedHtmlDocument);
+            expectedHtmlDocument.Text = NotEmptyText;
 
             // Act
             var result = siteResolver.GetMetacriticGameListHtmlDocument(GamePlatform.PC, 0);
@@ -49,6 +52,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 .Throws<Exception>()
                 .Throws<Exception>()
                 .Returns(expectedHtmlDocument);
+            expectedHtmlDocument.Text = NotEmptyText;
 
             // Act
             var result = siteResolver.GetMetacriticGameListHtmlDocument(GamePlatform.PC, 0);
@@ -93,6 +97,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             htmlWebWrapper
                 .Setup(s => s.Load(It.IsAny<Uri>()))
                 .Returns(expectedHtmlDocument);
+            expectedHtmlDocument.Text = NotEmptyText;
 
             // Act
             var result = siteResolver.GetGameHtmlDocument(@"http://sample.com");
@@ -115,6 +120,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 .Throws<Exception>()
                 .Throws<Exception>()
                 .Returns(expectedHtmlDocument);
+            expectedHtmlDocument.Text = NotEmptyText;
 
             // Act
             var result = siteResolver.GetGameHtmlDocument(@"http://sample.com");

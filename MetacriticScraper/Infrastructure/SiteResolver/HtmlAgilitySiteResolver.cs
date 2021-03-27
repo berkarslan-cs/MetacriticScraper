@@ -9,6 +9,7 @@ namespace MetacriticScraper.Infrastructure.SiteResolver
     public class HtmlAgilitySiteResolver : ISiteResolver
     {
         private const int NumberOfRetrial = 3;
+        private const string NoContentReturnedErrorMessage = "No content has returned.";
         private readonly ISiteUriResolver siteUrlFactory;
         private readonly IHtmlWebWrapper htmlWebWrapper;
 
@@ -39,7 +40,13 @@ namespace MetacriticScraper.Infrastructure.SiteResolver
         {
             try
             {
-                return htmlWebWrapper.Load(siteUriToRequest);
+                var htmlDocument = htmlWebWrapper.Load(siteUriToRequest);
+                if (string.IsNullOrWhiteSpace(htmlDocument?.Text))
+                {
+                    throw new Exception(NoContentReturnedErrorMessage);
+                }
+
+                return htmlDocument;
             }
             catch
             {
