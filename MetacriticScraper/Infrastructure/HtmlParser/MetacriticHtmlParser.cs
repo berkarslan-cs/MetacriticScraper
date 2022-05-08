@@ -33,7 +33,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
 
         private const string StructureOfWebsiteMightBeChangedErrorMessage = "The structure of the website might be changed.";
         private const string AnchorLinkHrefAttributeName = "href";
-        private static readonly string GamesNotFoundErrorMessage = $"Game list elements are not found in the html document. {GamesNotFoundErrorMessage}";
+        private static readonly string GamesNotFoundErrorMessage = $"Game list elements are not found in the html document. {StructureOfWebsiteMightBeChangedErrorMessage}";
         private static readonly string LastPageNotFoundErrorMessage = $"Last page not found in the html document. {StructureOfWebsiteMightBeChangedErrorMessage}";
         private readonly IMetacriticGameConverter metacriticGameConverter;
 
