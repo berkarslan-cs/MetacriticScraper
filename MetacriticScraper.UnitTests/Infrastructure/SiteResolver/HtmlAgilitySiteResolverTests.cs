@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using HtmlAgilityPack;
 using MetacriticScraper.Infrastructure.SiteResolver;
 using MetacriticScraper.Models;
@@ -25,8 +26,9 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 siteUriResolverMock.Object,
                 htmlWebWrapper.Object);
             var expectedHtmlDocument = new HtmlDocument();
+            var statusCodeOk = HttpStatusCode.OK;
             htmlWebWrapper
-                .Setup(s => s.Load(It.IsAny<Uri>()))
+                .Setup(s => s.Load(It.IsAny<Uri>(), out statusCodeOk))
                 .Returns(expectedHtmlDocument);
             expectedHtmlDocument.Text = NotEmptyText;
 
@@ -47,8 +49,9 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 siteUriResolverMock.Object,
                 htmlWebWrapper.Object);
             var expectedHtmlDocument = new HtmlDocument();
+            var statusCodeOk = HttpStatusCode.OK;
             htmlWebWrapper
-                .SetupSequence(s => s.Load(It.IsAny<Uri>()))
+                .SetupSequence(s => s.Load(It.IsAny<Uri>(), out statusCodeOk))
                 .Throws<Exception>()
                 .Throws<Exception>()
                 .Returns(expectedHtmlDocument);
@@ -61,7 +64,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             result.ShouldSatisfyAllConditions(
                 () => result.ShouldBe(expectedHtmlDocument),
                 () => htmlWebWrapper.Verify(
-                    a => a.Load(It.IsAny<Uri>()),
+                    a => a.Load(It.IsAny<Uri>(), out statusCodeOk),
                     Times.Exactly(3)));
         }
 
@@ -74,8 +77,9 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             var siteResolver = new HtmlAgilitySiteResolver(
                 siteUriResolverMock.Object,
                 htmlWebWrapper.Object);
+            var statusCodeBadRequest = HttpStatusCode.BadRequest;
             htmlWebWrapper
-                .SetupSequence(s => s.Load(It.IsAny<Uri>()))
+                .SetupSequence(s => s.Load(It.IsAny<Uri>(), out statusCodeBadRequest))
                 .Throws<Exception>()
                 .Throws<Exception>()
                 .Throws<Exception>()
@@ -94,8 +98,9 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 null,
                 htmlWebWrapper.Object);
             var expectedHtmlDocument = new HtmlDocument();
+            var statusCodeOk = HttpStatusCode.OK;
             htmlWebWrapper
-                .Setup(s => s.Load(It.IsAny<Uri>()))
+                .Setup(s => s.Load(It.IsAny<Uri>(), out statusCodeOk))
                 .Returns(expectedHtmlDocument);
             expectedHtmlDocument.Text = NotEmptyText;
 
@@ -115,8 +120,9 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 null,
                 htmlWebWrapper.Object);
             var expectedHtmlDocument = new HtmlDocument();
+            var statusCodeOk = HttpStatusCode.OK;
             htmlWebWrapper
-                .SetupSequence(s => s.Load(It.IsAny<Uri>()))
+                .SetupSequence(s => s.Load(It.IsAny<Uri>(), out statusCodeOk))
                 .Throws<Exception>()
                 .Throws<Exception>()
                 .Returns(expectedHtmlDocument);
@@ -129,7 +135,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             result.ShouldSatisfyAllConditions(
                 () => result.ShouldBe(expectedHtmlDocument),
                 () => htmlWebWrapper.Verify(
-                    a => a.Load(It.IsAny<Uri>()),
+                    a => a.Load(It.IsAny<Uri>(), out statusCodeOk),
                     Times.Exactly(3)));
         }
 
@@ -141,8 +147,9 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             var siteResolver = new HtmlAgilitySiteResolver(
                 null,
                 htmlWebWrapper.Object);
+            var statusCodeBadRequest = HttpStatusCode.BadRequest;
             htmlWebWrapper
-                .SetupSequence(s => s.Load(It.IsAny<Uri>()))
+                .SetupSequence(s => s.Load(It.IsAny<Uri>(), out statusCodeBadRequest))
                 .Throws<Exception>()
                 .Throws<Exception>()
                 .Throws<Exception>()

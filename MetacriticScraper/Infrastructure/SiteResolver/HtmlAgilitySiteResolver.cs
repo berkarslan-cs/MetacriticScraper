@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Xml.XPath;
 using HtmlAgilityPack;
 using MetacriticScraper.Models;
@@ -9,6 +10,7 @@ namespace MetacriticScraper.Infrastructure.SiteResolver
     public class HtmlAgilitySiteResolver : ISiteResolver
     {
         private const int NumberOfRetrial = 3;
+        private const string WrongHttpStatusCodeErrorMessage = "Status code of {0} is returned instead of OK.";
         private const string NoContentReturnedErrorMessage = "No content has returned.";
         private readonly ISiteUriResolver siteUrlFactory;
         private readonly IHtmlWebWrapper htmlWebWrapper;
@@ -40,8 +42,12 @@ namespace MetacriticScraper.Infrastructure.SiteResolver
         {
             try
             {
-                var htmlDocument = htmlWebWrapper.Load(siteUriToRequest);
-                if (string.IsNullOrWhiteSpace(htmlDocument?.Text))
+                var htmlDocument = htmlWebWrapper.Load(siteUriToRequest, out var httpStatusCode);
+                if (httpStatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception(string.Format(WrongHttpStatusCodeErrorMessage, httpStatusCode));
+                }
+                else if (string.IsNullOrWhiteSpace(htmlDocument?.Text))
                 {
                     throw new Exception(NoContentReturnedErrorMessage);
                 }
