@@ -158,5 +158,25 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             // Act & Assert
             Should.Throw<Exception>(() => siteResolver.GetGameHtmlDocument(@"http://sample.com"));
         }
+
+        [Test]
+        public void GetGameHtmlDocument_ForABadRequestResponse_ThrowsExceptionAfterExecutingRepeatedly()
+        {
+            // Arrange
+            var htmlWebWrapper = new Mock<IHtmlWebWrapper>();
+            var siteResolver = new HtmlAgilitySiteResolver(
+                null,
+                htmlWebWrapper.Object);
+            var statusCodeBadRequest = HttpStatusCode.BadRequest;
+            htmlWebWrapper
+                .Setup(s => s.Load(It.IsAny<Uri>(), out statusCodeBadRequest))
+                .Returns(new HtmlDocument());
+
+            // Act & Assert
+            Should.Throw<Exception>(() => siteResolver.GetGameHtmlDocument(@"http://sample.com"));
+            htmlWebWrapper.Verify(
+                    a => a.Load(It.IsAny<Uri>(), out statusCodeBadRequest),
+                    Times.Exactly(3));
+        }
     }
 }
