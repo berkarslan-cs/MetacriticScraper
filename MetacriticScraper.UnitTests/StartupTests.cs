@@ -8,7 +8,7 @@ using Moq;
 using NUnit.Framework;
 using Shouldly;
 
-namespace MetacriticScraper.UnitTests.Infrastructure.Site
+namespace MetacriticScraper.UnitTests
 {
     /// <summary>
     /// Includes tests for <see cref="Startup"/>.

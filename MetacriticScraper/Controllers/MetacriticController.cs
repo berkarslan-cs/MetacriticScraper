@@ -29,7 +29,7 @@ namespace MetacriticScraper.Controllers
         /// <returns>Game list.</returns>
         // GET api/Metacritic
         [HttpGet]
-        public ActionResult<IList<Game>> Get([FromQuery]GameFilter gameFilter)
+        public ActionResult<IList<Game>> Get([FromQuery] GameFilter gameFilter)
         {
             // Validate input
             if (gameFilter?.MinReleaseDate == null || gameFilter?.MinReleaseDate > DateTime.Now)

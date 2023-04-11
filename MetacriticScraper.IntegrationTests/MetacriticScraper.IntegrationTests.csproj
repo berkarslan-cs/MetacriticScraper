@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\sensoride.json" Link="sensoride.json" />
+    <Content Include="..\stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
   <ItemGroup>

@@ -50,21 +50,15 @@
         /// </summary>
         /// <param name="detailPageValidation">Flag for validating the game entity in detail.</param>
         /// <returns>True if valid; false in otherwise.</returns>
-        public bool IsValid(bool detailPageValidation = false)
-        {
-            // NumberOfUserReviews can be null in case the page includes "Please spend some time playing the game." kind of text, therefore, the following ignores it.
-            if (Name == null ||
-                Platform == null ||
-                Url == null ||
-                (!detailPageValidation && MetaScore == null) ||
-                (!detailPageValidation && UserScore == null) ||
-                ReleaseDate == null ||
-                (detailPageValidation && NumberOfCriticReviews == null))
-            {
-                return false;
-            }
+        public bool IsValid(bool detailPageValidation = false) =>
 
-            return true;
-        }
+            // NumberOfUserReviews can be null in case the page includes "Please spend some time playing the game." kind of text, therefore, the following ignores it.
+            Name != null &&
+            Platform != null &&
+            Url != null &&
+            (detailPageValidation || MetaScore != null) &&
+            (detailPageValidation || UserScore != null) &&
+            ReleaseDate != null &&
+            (!detailPageValidation || NumberOfCriticReviews != null);
     }
 }
