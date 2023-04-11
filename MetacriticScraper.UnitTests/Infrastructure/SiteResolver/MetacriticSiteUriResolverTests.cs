@@ -3,7 +3,7 @@ using MetacriticScraper.Models;
 using NUnit.Framework;
 using Shouldly;
 
-namespace MetacriticScraper.UnitTests.Infrastructure.Site
+namespace MetacriticScraper.UnitTests.Infrastructure.SiteResolver
 {
     /// <summary>
     /// Includes tests for <see cref="MetacriticSiteUriResolver"/>.

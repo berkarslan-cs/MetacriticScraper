@@ -1,13 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetacriticScraper", "MetacriticScraper\MetacriticScraper.csproj", "{E2DF0157-AFF7-4715-B6D6-D3EE2E624F5B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetacriticScraper.UnitTests", "MetacriticScraper.UnitTests\MetacriticScraper.UnitTests.csproj", "{06300E22-7AF3-41DA-A4DF-7D1A194B4AFE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetacriticScraper.IntegrationTests", "MetacriticScraper.IntegrationTests\MetacriticScraper.IntegrationTests.csproj", "{5FFBCBB2-C9F0-4593-8ED2-FDA4974FE4FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{19E7A13C-F92F-42ED-BF4B-5AF63E048511}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		.runsettings = .runsettings
+		azure-pipelines.yml = azure-pipelines.yml
+		GlobalSuppressions.cs = GlobalSuppressions.cs
+		README.md = README.md
+		stylecop.json = stylecop.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

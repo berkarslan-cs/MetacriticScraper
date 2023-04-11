@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using Shouldly;
 
-namespace Tests.Controllers
+namespace MetacriticScraper.UnitTests.Controllers
 {
     /// <summary>
     /// Includes tests for <see cref="MetacriticController"/>.

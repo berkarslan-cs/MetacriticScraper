@@ -22,7 +22,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
         private const string Game4Url = @"http://sample4.org";
         private const string Game5Url = @"http://sample5.org";
 #pragma warning disable SA1311 // Static readonly fields should begin with upper-case letter
-        private static readonly Game game1 = new Game
+        private static readonly Game game1 = new ()
         {
             MetaScore = 100,
             Name = "1",
@@ -32,7 +32,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             UserScore = 10,
         };
 
-        private static readonly Game game2 = new Game
+        private static readonly Game game2 = new ()
         {
             MetaScore = 63,
             Name = "2",
@@ -42,7 +42,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             UserScore = 6.3M,
         };
 
-        private static readonly Game game3 = new Game
+        private static readonly Game game3 = new ()
         {
             MetaScore = 59,
             Name = "3",
@@ -52,7 +52,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             UserScore = 3.4M,
         };
 
-        private static readonly Game game4 = new Game
+        private static readonly Game game4 = new ()
         {
             MetaScore = 61,
             Name = "4",
@@ -62,7 +62,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             UserScore = 5.9M,
         };
 
-        private static readonly Game game5 = new Game
+        private static readonly Game game5 = new ()
         {
             MetaScore = 41,
             Name = "5",
@@ -81,7 +81,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             game5,
         };
 
-        private static readonly Game gameWithDetail1 = new Game
+        private static readonly Game gameWithDetail1 = new ()
         {
             MetaScore = 100,
             Name = "1",
@@ -96,7 +96,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             },
         };
 
-        private static readonly Game gameWithDetail2 = new Game
+        private static readonly Game gameWithDetail2 = new ()
         {
             MetaScore = 63,
             Name = "2",
@@ -110,7 +110,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             },
         };
 
-        private static readonly Game gameWithDetail3 = new Game
+        private static readonly Game gameWithDetail3 = new ()
         {
             MetaScore = 59,
             Name = "3",
@@ -124,7 +124,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             },
         };
 
-        private static readonly Game gameWithDetail4 = new Game
+        private static readonly Game gameWithDetail4 = new ()
         {
             MetaScore = 61,
             Name = "4",
@@ -139,7 +139,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             },
         };
 
-        private static readonly Game gameWithDetail5 = new Game
+        private static readonly Game gameWithDetail5 = new ()
         {
             MetaScore = 41,
             Name = "5",

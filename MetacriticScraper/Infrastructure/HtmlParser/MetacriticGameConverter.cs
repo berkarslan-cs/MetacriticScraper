@@ -8,14 +8,13 @@ using MetacriticScraper.Models;
 namespace MetacriticScraper.Infrastructure.HtmlParser
 {
     /// <inheritdoc />
-    public class MetacriticGameConverter : IMetacriticGameConverter
+    public partial class MetacriticGameConverter : IMetacriticGameConverter
     {
         private const string ToBeDecidedText = "tbd";
         private const string LongMonthReleaseDateFormat = "MMMM d, yyyy";
         private const string MidLengthedMonthReleaseDateFormat = "MMM d, yyyy";
-        private const string RegexPatternForMultipleSpaces = "[ ]{2,}";
         private static readonly string GameDataNotFoundErrorMessage = $"Game details cannot be got from the html document. The structure of the website might be changed.";
-        private static readonly Dictionary<GamePlatform?, IList<string>> PlatformStringMappings = new Dictionary<GamePlatform?, IList<string>>
+        private static readonly Dictionary<GamePlatform?, IList<string>> PlatformStringMappings = new ()
         {
             {
                 GamePlatform.PC,
@@ -44,28 +43,22 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         /// <inheritdoc />
         public Game ConvertToGameEntity(
             MetacriticGame game,
-            bool detailPageValidation = false)
-        {
-            if (!game.IsValid(detailPageValidation))
-            {
-                throw new Exception(GameDataNotFoundErrorMessage);
-            }
-
-            return new Game
-            {
-                MetaScore = GetMetascore(game.MetaScore),
-                Name = GetName(game.Name),
-                Platform = GetPlatform(game.Platform),
-                ReleaseDate = GetReleaseDate(game.ReleaseDate),
-                Url = GetUrl(game.Url),
-                UserScore = GetUserScore(game.UserScore),
-                GameDetail = new GameDetail
+            bool detailPageValidation = false) => !game.IsValid(detailPageValidation)
+                ? throw new Exception(GameDataNotFoundErrorMessage)
+                : new Game
                 {
-                    NumberOfCriticReviews = GetNumberOfCriticReviews(game.NumberOfCriticReviews),
-                    NumberOfUserReviews = GetNumberOfUserReviews(game.NumberOfUserReviews),
-                },
-            };
-        }
+                    MetaScore = GetMetascore(game.MetaScore),
+                    Name = GetName(game.Name),
+                    Platform = GetPlatform(game.Platform),
+                    ReleaseDate = GetReleaseDate(game.ReleaseDate),
+                    Url = GetUrl(game.Url),
+                    UserScore = GetUserScore(game.UserScore),
+                    GameDetail = new GameDetail
+                    {
+                        NumberOfCriticReviews = GetNumberOfCriticReviews(game.NumberOfCriticReviews),
+                        NumberOfUserReviews = GetNumberOfUserReviews(game.NumberOfUserReviews),
+                    },
+                };
 
         private static string TrimTabNewLineSpaces(string toBeTrimmedString) =>
             toBeTrimmedString.Trim(new char[]
@@ -84,12 +77,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
             }
 
             var parsed = int.TryParse(TrimTabNewLineSpaces(numberOfCriticReviews), out var reviewCountInt);
-            if (!parsed)
-            {
-                throw new Exception(GameDataNotFoundErrorMessage);
-            }
-
-            return reviewCountInt;
+            return !parsed ? throw new Exception(GameDataNotFoundErrorMessage) : reviewCountInt;
         }
 
         private static int? GetNumberOfUserReviews(string numberOfUserReviews)
@@ -104,12 +92,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
                     .TakeWhile(t => !t.Equals(' '))
                     .ToArray());
             var parsed = int.TryParse(reviewCount, out var reviewCountInt);
-            if (!parsed)
-            {
-                throw new Exception(GameDataNotFoundErrorMessage);
-            }
-
-            return reviewCountInt;
+            return !parsed ? throw new Exception(GameDataNotFoundErrorMessage) : reviewCountInt;
         }
 
         private static GamePlatform GetPlatform(string platform)
@@ -131,12 +114,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
             else
             {
                 var parseSucceeded = decimal.TryParse(userScore, out var convertedUserScore);
-                if (!parseSucceeded)
-                {
-                    throw new ArgumentException($"Unknown {nameof(userScore)}: {userScore}");
-                }
-
-                return convertedUserScore;
+                return !parseSucceeded ? throw new ArgumentException($"Unknown {nameof(userScore)}: {userScore}") : convertedUserScore;
             }
         }
 
@@ -149,12 +127,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
             else
             {
                 var parseSucceeded = int.TryParse(metaScore, out var convertedMetaScore);
-                if (!parseSucceeded)
-                {
-                    throw new ArgumentException($"Unknown {nameof(metaScore)}: {metaScore}");
-                }
-
-                return convertedMetaScore;
+                return !parseSucceeded ? throw new ArgumentException($"Unknown {nameof(metaScore)}: {metaScore}") : convertedMetaScore;
             }
         }
 
@@ -167,7 +140,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         private static DateTime GetReleaseDate(string releaseDate)
         {
             // Trim the release date in a way that multiple spaces in the middle of the release date will get replaced with one.
-            var pattern = new Regex(RegexPatternForMultipleSpaces);
+            var pattern = RegexPatternForMultipleSpaces();
             releaseDate = pattern.Replace(releaseDate.Trim(), " ");
 
             var parseSucceeded = DateTime.TryParseExact(
@@ -182,12 +155,12 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
                 CultureInfo.CurrentCulture,
                 DateTimeStyles.None,
                 out convertedReleaseDate);
-            if (!parseSucceeded)
-            {
-                throw new ArgumentException($"Release date couldn't be parsed {nameof(releaseDate)}: {releaseDate}");
-            }
-
-            return convertedReleaseDate;
+            return !parseSucceeded
+                ? throw new ArgumentException($"Release date couldn't be parsed {nameof(releaseDate)}: {releaseDate}")
+                : convertedReleaseDate;
         }
+
+        [GeneratedRegex("[ ]{2,}")]
+        private static partial Regex RegexPatternForMultipleSpaces();
     }
 }

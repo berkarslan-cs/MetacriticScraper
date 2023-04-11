@@ -3,12 +3,10 @@ using Microsoft.Extensions.Hosting;
 
 namespace MetacriticScraper
 {
-#pragma warning disable S1118 // Utility classes should not have public constructors
-                             /// <summary>
-                             /// System class.
-                             /// </summary>
+    /// <summary>
+    /// System class.
+    /// </summary>
     public class Program
-#pragma warning restore S1118 // Utility classes should not have public constructors
     {
         /// <summary>
         /// Main entry.

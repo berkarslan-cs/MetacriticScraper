@@ -46,7 +46,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         /// <inheritdoc/>
         public IList<Game> GetGames(IXPathNavigable xPathNavigableHtmlDocument)
         {
-            if (!(xPathNavigableHtmlDocument is HtmlDocument htmlDocument))
+            if (xPathNavigableHtmlDocument is not HtmlDocument htmlDocument)
             {
                 throw new ArgumentNullException(nameof(xPathNavigableHtmlDocument), $"Parameter should be non-empty {typeof(HtmlDocument).Name}");
             }
@@ -64,41 +64,26 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         /// <inheritdoc/>
         public int GetNumberOfPages(IXPathNavigable xPathNavigableHtmlDocument)
         {
-            if (!(xPathNavigableHtmlDocument is HtmlDocument htmlDocument))
+            if (xPathNavigableHtmlDocument is not HtmlDocument htmlDocument)
             {
                 throw new ArgumentNullException(nameof(xPathNavigableHtmlDocument), $"Parameter should be non-empty {typeof(HtmlDocument).Name}");
             }
 
             var lastPageText = htmlDocument.DocumentNode.SelectSingleNode(GameListLastPageXPathSelector)?.InnerText;
             var parseSuccessful = int.TryParse(lastPageText, out var lastPage);
-            if (!parseSuccessful)
-            {
-                throw new Exception(LastPageNotFoundErrorMessage);
-            }
-
-            return lastPage;
+            return !parseSuccessful ? throw new Exception(LastPageNotFoundErrorMessage) : lastPage;
         }
 
         /// <inheritdoc/>
-        public Game GetGameDetails(IXPathNavigable xPathNavigableHtmlDocument)
-        {
-            if (!(xPathNavigableHtmlDocument is HtmlDocument htmlDocument))
-            {
-                throw new ArgumentNullException(nameof(xPathNavigableHtmlDocument), $"Parameter should be non-empty {typeof(HtmlDocument).Name}");
-            }
-
-            return GetGameWithDetailedInfo(htmlDocument);
-        }
+        public Game GetGameDetails(IXPathNavigable xPathNavigableHtmlDocument) =>
+            xPathNavigableHtmlDocument is not HtmlDocument htmlDocument
+                ? throw new ArgumentNullException(nameof(xPathNavigableHtmlDocument), $"Parameter should be non-empty {typeof(HtmlDocument).Name}")
+                : GetGameWithDetailedInfo(htmlDocument);
 
         private static HtmlNodeCollection GetGameListElements(HtmlDocument htmlDocument)
         {
             var gameListElements = htmlDocument.DocumentNode.SelectNodes(GameListElementSelector);
-            if (gameListElements == null)
-            {
-                throw new Exception(GamesNotFoundErrorMessage);
-            }
-
-            return gameListElements;
+            return gameListElements ?? throw new Exception(GamesNotFoundErrorMessage);
         }
 
         private Game GetGameWithBasicInfo(HtmlNode gameElement)
