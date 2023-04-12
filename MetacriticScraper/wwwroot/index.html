@@ -186,7 +186,7 @@
             MinReleaseDate: $('#releasedate').val(),
         };
         var queryString = encodeQueryData(params);
-        return 'https://localhost:44380/api/Metacritic?' + queryString;
+        return '/api/Metacritic?' + queryString;
     }
 
     function appendRow(tr) {
