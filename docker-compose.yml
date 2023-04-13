@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  metacriticscraper:
+    image: ${DOCKER_REGISTRY-}metacriticscraper
+    build:
+      context: .
+      dockerfile: MetacriticScraper/Dockerfile
