@@ -11,7 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetacriticScraper.Integrati
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{19E7A13C-F92F-42ED-BF4B-5AF63E048511}"
 	ProjectSection(SolutionItems) = preProject
-		.dockerignore = .dockerignore
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
@@ -21,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{19E7A1
 		README.md = README.md
 		stylecop.json = stylecop.json
 	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2C9B898D-1547-4D81-A5FD-BE243F6E93A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +41,10 @@ Global
 		{5FFBCBB2-C9F0-4593-8ED2-FDA4974FE4FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FFBCBB2-C9F0-4593-8ED2-FDA4974FE4FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FFBCBB2-C9F0-4593-8ED2-FDA4974FE4FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C9B898D-1547-4D81-A5FD-BE243F6E93A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C9B898D-1547-4D81-A5FD-BE243F6E93A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C9B898D-1547-4D81-A5FD-BE243F6E93A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C9B898D-1547-4D81-A5FD-BE243F6E93A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
