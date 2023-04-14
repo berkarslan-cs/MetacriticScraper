@@ -5,33 +5,37 @@ pr:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
+
+variables:
+  projectName: $(System.TeamProject)
+  dockerRepository: $(DOCKERHUB_USERNAME)/metacriticscraper
 
 jobs:
   - job: BuildSolution
     displayName: Build Solution
     steps:
       - task: DotNetCoreCLI@2
-        displayName: 'Building'
+        displayName: Building
         inputs:
-          command: 'build'
-          arguments: '--configuration $(buildConfiguration) *.sln'
+          command: build
+          arguments: --configuration $(buildConfiguration) $(projectName).sln
 
       - task: DotNetCoreCLI@2
-        displayName: 'Running Unit Tests'
+        displayName: Running Unit Tests
         inputs:
-          command: 'test'
+          command: test
           projects: '**/*UnitTests.csproj'
           arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
-          testRunTitle: 'Run tests'
+          testRunTitle: Run tests
 
       - task: DotNetCoreCLI@2
-        displayName: 'Running Integration Tests'
+        displayName: Running Integration Tests
         inputs:
-          command: 'test'
+          command: test
           projects: '**/*IntegrationTests.csproj'
           arguments: '--configuration $(buildConfiguration) --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
-          testRunTitle: 'Run tests'
+          testRunTitle: Run tests
 
   - job: BuildDockerImage
     displayName: Build Docker Image
@@ -39,9 +43,9 @@ jobs:
       - task: Docker@2
         displayName: Building Docker Image
         inputs:
-          repository: $(DOCKERHUB_USERNAME)/metacriticscraper
+          repository: $(dockerRepository)
           command: build
-          Dockerfile: /MetacriticScraper/Dockerfile
+          Dockerfile: $(projectName)/Dockerfile
           buildContext: .
   
   - job: PublishDockerImage
@@ -53,9 +57,9 @@ jobs:
       - task: Docker@2
         displayName: Pushing Docker Image
         inputs:
-          containerRegistry: 'DockerHub'
-          repository: '$(DOCKERHUB_USERNAME)/metacriticscraper'
-          command: 'push'
+          containerRegistry: DockerHub
+          repository: $(dockerRepository)
+          command: push
           tags: |
             latest
             0.1.$(Build.BuildId)
