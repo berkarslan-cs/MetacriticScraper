@@ -49,6 +49,7 @@ jobs:
       - task: Docker@2
         displayName: Building & Publishing Docker Image
         inputs:
+          containerRegistry: DockerHub
           repository: $(dockerRepository)
           command: buildAndPush
           Dockerfile: $(projectName)/Dockerfile
