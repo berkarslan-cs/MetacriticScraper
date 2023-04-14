@@ -7,31 +7,55 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  projectName: $(System.TeamProject)
-
 jobs:
-  - job: Build
+  - job: BuildSolution
     displayName: Build Solution
     steps:
       - task: DotNetCoreCLI@2
+        displayName: 'Building'
         inputs:
           command: 'build'
-          arguments: '--configuration $(buildConfiguration) $(projectName).sln'
-        displayName: 'Building'
+          arguments: '--configuration $(buildConfiguration) *.sln'
 
       - task: DotNetCoreCLI@2
+        displayName: 'Running Unit Tests'
         inputs:
           command: 'test'
           projects: '**/*UnitTests.csproj'
           arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
           testRunTitle: 'Run tests'
-        displayName: 'Running Unit Tests'
 
       - task: DotNetCoreCLI@2
+        displayName: 'Running Integration Tests'
         inputs:
           command: 'test'
           projects: '**/*IntegrationTests.csproj'
           arguments: '--configuration $(buildConfiguration) --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
           testRunTitle: 'Run tests'
-        displayName: 'Running Integration Tests'
+
+  - job: BuildDockerImage
+    displayName: Build Docker Image
+    steps:
+      - task: Docker@2
+        displayName: Building Docker Image
+        inputs:
+          repository: $(DOCKERHUB_USERNAME)/metacriticscraper
+          command: build
+          Dockerfile: /MetacriticScraper/Dockerfile
+          buildContext: .
+  
+  - job: PublishDockerImage
+    displayName: Push Docker Image
+    dependsOn:
+      - BuildSolution
+      - BuildDockerImage
+    steps:
+      - task: Docker@2
+        displayName: Pushing Docker Image
+        inputs:
+          containerRegistry: 'DockerHub'
+          repository: '$(DOCKERHUB_USERNAME)/metacriticscraper'
+          command: 'push'
+          tags: |
+            latest
+            0.1.$(Build.BuildId)
