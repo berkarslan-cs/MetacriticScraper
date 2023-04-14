@@ -53,13 +53,7 @@ jobs:
           tags: |
             latest
             0.1.$(Build.BuildId)
-  
-  - job: PublishDockerImage
-    displayName: Push Docker Image
-    dependsOn:
-      - BuildSolution
-      - BuildDockerImage
-    steps:
+            
       - task: Docker@2
         displayName: Pushing Docker Image
         inputs:
