@@ -53,7 +53,25 @@ jobs:
           tags: |
             latest
             0.1.$(Build.BuildId)
-            
+
+      - task: PublishBuildArtifacts@1
+        displayName: Publishing Docker Image
+        inputs:
+          PathtoPublish: $(BuildDockerImage.DockerOutput)
+          ArtifactName: 'docker-image'
+  
+  - job: PublishDockerImage
+    displayName: Push Docker Image
+    dependsOn:
+      - BuildSolution
+      - BuildDockerImage
+    steps:
+      - task: DownloadBuildArtifacts@1
+        displayName: Downloading Docker Image
+        inputs:
+          artifactName: 'docker-image'
+          downloadPath: $[ dependencies.BuildDockerImage.outputs['BuildDockerImage.DockerOutput'] ]
+
       - task: Docker@2
         displayName: Pushing Docker Image
         inputs:
