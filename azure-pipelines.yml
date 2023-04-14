@@ -1,25 +1,29 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
 - master
 
+pr:
+- master
+
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
-  buildConfiguration: 'Release'
+  projectName: $(System.TeamProject)
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration) $(System.TeamProject).sln
-  displayName: 'Building'
+jobs:
+  - job: Build
+    displayName: Build Solution
+    steps:
+      - script: dotnet build --configuration $(buildConfiguration) $(projectName).sln
+        displayName: 'Building'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: '**/*Tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings'
-    testRunTitle: 'Run tests'
-  displayName: 'Running Unit and Integration Tests'
+  - job: Test
+    displayName: Execute Tests
+    steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          projects: '**/*Tests/*.csproj'
+          arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings'
+          testRunTitle: 'Run tests'
+        displayName: 'Running Unit & Integration Tests'
