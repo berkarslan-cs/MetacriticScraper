@@ -50,6 +50,9 @@ jobs:
           command: build
           Dockerfile: $(projectName)/Dockerfile
           buildContext: .
+          tags: |
+            latest
+            0.1.$(Build.BuildId)
   
   - job: PublishDockerImage
     displayName: Push Docker Image
