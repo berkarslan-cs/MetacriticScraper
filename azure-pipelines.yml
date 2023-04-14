@@ -44,6 +44,7 @@ jobs:
     displayName: Build Docker Image
     steps:
       - task: Docker@2
+        name: dockerBuild
         displayName: Building Docker Image
         inputs:
           repository: $(dockerRepository)
@@ -57,7 +58,7 @@ jobs:
       - task: PublishBuildArtifacts@1
         displayName: Publishing Docker Image
         inputs:
-          PathtoPublish: $(BuildDockerImage.DockerOutput)
+          PathtoPublish: $(dockerBuild.DockerOutput)
           ArtifactName: 'docker-image'
   
   - job: PublishDockerImage
@@ -70,7 +71,7 @@ jobs:
         displayName: Downloading Docker Image
         inputs:
           artifactName: 'docker-image'
-          downloadPath: $[ dependencies.BuildDockerImage.outputs['BuildDockerImage.DockerOutput'] ]
+          downloadPath: $[ dependencies.BuildDockerImage.outputs['dockerBuild.DockerOutput'] ]
 
       - task: Docker@2
         displayName: Pushing Docker Image
