@@ -68,7 +68,7 @@ jobs:
       - task: PublishBuildArtifacts@1
         displayName: Publishing Docker Image
         inputs:
-          PathtoPublish: $(Build.ArtifactStagingDirectory)/$(dockerImageArtifactName)
+          PathtoPublish: $(Build.ArtifactStagingDirectory)
           ArtifactName: $(dockerImageArtifactName)
   
   - job: PublishDockerImage
