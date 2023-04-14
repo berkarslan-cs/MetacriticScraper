@@ -32,6 +32,6 @@ jobs:
         inputs:
           command: 'test'
           projects: '**/*IntegrationTests.csproj'
-          arguments: '--configuration $(buildConfiguration) --no-build'
+          arguments: '--configuration $(buildConfiguration) --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
           testRunTitle: 'Run tests'
         displayName: 'Running Integration Tests'
