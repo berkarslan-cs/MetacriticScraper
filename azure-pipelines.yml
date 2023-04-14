@@ -8,8 +8,11 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  projectName: $(System.TeamProject)
-  dockerRepository: $(DOCKERHUB_USERNAME)/metacriticscraper
+  - group: Docker Hub
+  - name: projectName
+    value: $(System.TeamProject)
+  - name: dockerRepository
+    value: $(DOCKERHUB_USERNAME)/metacriticscraper
 
 jobs:
   - job: BuildSolution
