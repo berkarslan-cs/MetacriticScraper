@@ -14,16 +14,24 @@ jobs:
   - job: Build
     displayName: Build Solution
     steps:
-      - script: dotnet build --configuration $(buildConfiguration) $(projectName).sln
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          arguments: '--configuration $(buildConfiguration) $(projectName).sln'
         displayName: 'Building'
 
-  - job: Test
-    displayName: Execute Tests
-    steps:
       - task: DotNetCoreCLI@2
         inputs:
           command: 'test'
-          projects: '**/*Tests/*.csproj'
-          arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings'
+          projects: '**/*UnitTests.csproj'
+          arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
           testRunTitle: 'Run tests'
-        displayName: 'Running Unit & Integration Tests'
+        displayName: 'Running Unit Tests'
+
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          projects: '**/*IntegrationTests.csproj'
+          arguments: '--configuration $(buildConfiguration) --no-build'
+          testRunTitle: 'Run tests'
+        displayName: 'Running Integration Tests'
