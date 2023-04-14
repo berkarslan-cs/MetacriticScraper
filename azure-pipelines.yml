@@ -13,6 +13,10 @@ variables:
     value: $(System.TeamProject)
   - name: dockerRepository
     value: $(DOCKERHUB_USERNAME)/metacriticscraper
+  - name: dockerImageVersion
+    value: 0.1.$(Build.BuildId)
+  - name: dockerImageArtifactName
+    value: docker-image.tar
 
 jobs:
   - job: BuildSolution
@@ -53,13 +57,19 @@ jobs:
           buildContext: .
           tags: |
             latest
-            0.1.$(Build.BuildId)
+            $(dockerImageVersion)
+
+      - task: Docker@0
+        inputs:
+          containerregistrytype: 'Azure Container Registry'
+          action: 'Run a Docker command'
+          customCommand: 'image save $(dockerRepository):$(dockerImageVersion) -o $(Build.ArtifactStagingDirectory)/$(dockerImageArtifactName)'
 
       - task: PublishBuildArtifacts@1
         displayName: Publishing Docker Image
         inputs:
-          PathtoPublish: $(dockerBuild.DockerOutput)
-          ArtifactName: 'docker-image'
+          PathtoPublish: $(Build.ArtifactStagingDirectory)/$(dockerImageArtifactName)
+          ArtifactName: $(dockerImageArtifactName)
   
   - job: PublishDockerImage
     displayName: Push Docker Image
@@ -70,8 +80,14 @@ jobs:
       - task: DownloadBuildArtifacts@1
         displayName: Downloading Docker Image
         inputs:
-          artifactName: 'docker-image'
-          downloadPath: $[ dependencies.BuildDockerImage.outputs['dockerBuild.DockerOutput'] ]
+          artifactName: $(dockerImageArtifactName)
+          downloadPath: $(Pipeline.Workspace)
+
+      - task: Docker@0
+        inputs:
+          containerregistrytype: 'Azure Container Registry'
+          action: 'Run a Docker command'
+          customCommand: 'image load -i $(Pipeline.Workspace)/$(dockerImageArtifactName)'
 
       - task: Docker@2
         displayName: Pushing Docker Image
@@ -81,4 +97,4 @@ jobs:
           command: push
           tags: |
             latest
-            0.1.$(Build.BuildId)
+            $(dockerImageVersion)
