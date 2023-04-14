@@ -7,14 +7,14 @@ trigger:
 - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   buildConfiguration: 'Release'
 
 steps:
 - script: dotnet build --configuration $(buildConfiguration) $(System.TeamProject).sln
-  displayName: 'Building'
+  displayName: 'Building Solution'
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -22,4 +22,4 @@ steps:
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings'
     testRunTitle: 'Run tests'
-  displayName: 'Running Unit and Integration Tests'
+  displayName: 'Running Unit & Integration Tests'
