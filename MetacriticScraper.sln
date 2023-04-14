@@ -23,6 +23,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{19E7A1
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2C9B898D-1547-4D81-A5FD-BE243F6E93A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{83DDCDD3-A23F-4789-AD1A-F3B679AF8D59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{060F2EAE-058D-4848-8D95-D2AE2C90547D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\azure-pipelines.yml = .github\workflows\azure-pipelines.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +55,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{060F2EAE-058D-4848-8D95-D2AE2C90547D} = {83DDCDD3-A23F-4789-AD1A-F3B679AF8D59}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B94C964F-ADF1-4FB9-B22F-6C52F5CEC30D}
