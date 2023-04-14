@@ -13,10 +13,8 @@ variables:
     value: $(System.TeamProject)
   - name: dockerRepository
     value: $(DOCKERHUB_USERNAME)/metacriticscraper
-  - name: dockerImageVersion
+  - name: dockerImageVersionTag
     value: 0.1.$(Build.BuildId)
-  - name: dockerImageArtifactName
-    value: docker-image.tar
 
 jobs:
   - job: BuildSolution
@@ -34,7 +32,7 @@ jobs:
           command: test
           projects: '**/*UnitTests.csproj'
           arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
-          testRunTitle: Run tests
+          testRunTitle: Unit Tests
 
       - task: DotNetCoreCLI@2
         displayName: Running Integration Tests
@@ -42,59 +40,19 @@ jobs:
           command: test
           projects: '**/*IntegrationTests.csproj'
           arguments: '--configuration $(buildConfiguration) --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
-          testRunTitle: Run tests
+          testRunTitle: Integration Tests
 
-  - job: BuildDockerImage
-    displayName: Build Docker Image
+  - job: PrepareDockerImage
+    displayName: Build & Push Docker Image
+    dependsOn: BuildSolution
     steps:
       - task: Docker@2
-        name: dockerBuild
-        displayName: Building Docker Image
+        displayName: Building & Publishing Docker Image
         inputs:
           repository: $(dockerRepository)
-          command: build
+          command: buildAndPush
           Dockerfile: $(projectName)/Dockerfile
           buildContext: .
           tags: |
             latest
-            $(dockerImageVersion)
-
-      - task: Docker@0
-        inputs:
-          containerregistrytype: 'Azure Container Registry'
-          action: 'Run a Docker command'
-          customCommand: 'image save $(dockerRepository):$(dockerImageVersion) -o $(Build.ArtifactStagingDirectory)/$(dockerImageArtifactName)'
-
-      - task: PublishBuildArtifacts@1
-        displayName: Publishing Docker Image
-        inputs:
-          PathtoPublish: $(Build.ArtifactStagingDirectory)
-          ArtifactName: $(dockerImageArtifactName)
-  
-  - job: PublishDockerImage
-    displayName: Push Docker Image
-    dependsOn:
-      - BuildSolution
-      - BuildDockerImage
-    steps:
-      - task: DownloadBuildArtifacts@1
-        displayName: Downloading Docker Image
-        inputs:
-          artifactName: $(dockerImageArtifactName)
-          downloadPath: $(Pipeline.Workspace)
-
-      - task: Docker@0
-        inputs:
-          containerregistrytype: 'Azure Container Registry'
-          action: 'Run a Docker command'
-          customCommand: 'image load -i $(Pipeline.Workspace)/$(dockerImageArtifactName)'
-
-      - task: Docker@2
-        displayName: Pushing Docker Image
-        inputs:
-          containerRegistry: DockerHub
-          repository: $(dockerRepository)
-          command: push
-          tags: |
-            latest
-            $(dockerImageVersion)
+            $(dockerImageVersionTag)
