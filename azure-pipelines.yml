@@ -20,6 +20,11 @@ jobs:
   - job: BuildSolution
     displayName: Build Solution
     steps:
+      - task: Bash@3
+        inputs:
+        targetType: inline
+        script: env
+
       - task: DotNetCoreCLI@2
         displayName: Building
         inputs:
