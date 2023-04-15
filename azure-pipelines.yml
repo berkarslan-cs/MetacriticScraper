@@ -22,8 +22,8 @@ jobs:
     steps:
       - task: Bash@3
         inputs:
-        targetType: inline
-        script: env
+          targetType: inline
+          script: env
 
       - task: DotNetCoreCLI@2
         displayName: Building
