@@ -45,7 +45,6 @@ jobs:
   - job: PrepareDockerImage
     displayName: Build & Push Docker Image
     dependsOn: BuildSolution
-    condition: eq(variables['Build.SourceBranchName'], 'masterrrrr')
     steps:
       - task: Docker@2
         displayName: Building & Publishing Docker Image
