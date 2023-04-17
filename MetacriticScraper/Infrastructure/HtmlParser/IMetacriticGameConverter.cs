@@ -11,10 +11,14 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         /// Returns <see cref="Game"/> from the given <see cref="MetacriticGame"/>.
         /// </summary>
         /// <param name="game">Metacritic game.</param>
-        /// <param name="detailPageValidation">Flag for validating the game entity for detail page.</param>
         /// <returns>Game model.</returns>
-        Game ConvertToGameEntity(
-            MetacriticGame game,
-            bool detailPageValidation = false);
+        Game ConvertToGameEntity(MetacriticGameListPage game);
+
+        /// <summary>
+        /// Returns <see cref="Game"/> from the given <see cref="MetacriticGame"/>.
+        /// </summary>
+        /// <param name="game">Metacritic game.</param>
+        /// <returns>Game model.</returns>
+        Game ConvertToGameEntity(MetacriticGameDetailPage game);
     }
 }
