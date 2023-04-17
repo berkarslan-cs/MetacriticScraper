@@ -1,8 +1,11 @@
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+      - master
 
 pr:
-- master
+  - master
 
 pool:
   vmImage: ubuntu-latest
@@ -45,6 +48,7 @@ jobs:
   - job: PrepareDockerImage
     displayName: Build & Push Docker Image
     dependsOn: BuildSolution
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     steps:
       - task: Docker@2
         displayName: Building & Publishing Docker Image
