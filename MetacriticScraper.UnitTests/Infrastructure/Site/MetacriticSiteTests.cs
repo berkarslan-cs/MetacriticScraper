@@ -89,11 +89,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             ReleaseDate = new DateTime(DateTime.Now.Year, 1, 1),
             Url = Game1Url,
             UserScore = 10,
-            GameDetail = new GameDetail
-            {
-                NumberOfCriticReviews = 7,
-                NumberOfUserReviews = 10,
-            },
+            NumberOfCriticReviews = 7,
+            NumberOfUserReviews = 10,
         };
 
         private static readonly Game gameWithDetail2 = new ()
@@ -104,10 +101,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             ReleaseDate = new DateTime(DateTime.Now.Year - 1, 12, 31),
             Url = Game2Url,
             UserScore = 6.3M,
-            GameDetail = new GameDetail
-            {
-                NumberOfUserReviews = 10,
-            },
+            NumberOfUserReviews = 10,
         };
 
         private static readonly Game gameWithDetail3 = new ()
@@ -118,10 +112,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             ReleaseDate = new DateTime(DateTime.Now.Year - 1, 1, 1),
             Url = Game3Url,
             UserScore = 3.4M,
-            GameDetail = new GameDetail
-            {
-                NumberOfCriticReviews = 7,
-            },
+            NumberOfCriticReviews = 7,
         };
 
         private static readonly Game gameWithDetail4 = new ()
@@ -132,11 +123,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             ReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
             Url = Game4Url,
             UserScore = 5.9M,
-            GameDetail = new GameDetail
-            {
-                NumberOfCriticReviews = 7,
-                NumberOfUserReviews = 3,
-            },
+            NumberOfCriticReviews = 7,
+            NumberOfUserReviews = 3,
         };
 
         private static readonly Game gameWithDetail5 = new ()

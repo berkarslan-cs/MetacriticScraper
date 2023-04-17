@@ -95,8 +95,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
                 () => result.ReleaseDate.ShouldBe(expectedReleaseDate),
                 () => result.Url.ShouldBe(expectedUrl),
                 () => result.UserScore.ShouldBe(expectedUserScore),
-                () => result.GameDetail?.NumberOfCriticReviews.ShouldBe(expectedNumberOfCriticReviews),
-                () => result.GameDetail?.NumberOfUserReviews.ShouldBe(expectedNumberOfUserReviews));
+                () => result.NumberOfCriticReviews.ShouldBe(expectedNumberOfCriticReviews),
+                () => result.NumberOfUserReviews.ShouldBe(expectedNumberOfUserReviews));
         }
     }
 }

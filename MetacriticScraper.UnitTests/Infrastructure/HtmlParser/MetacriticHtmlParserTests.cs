@@ -106,15 +106,14 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             // Assert
             result.ShouldSatisfyAllConditions(
                 () => result.ShouldNotBeNull(),
-                () => result.GameDetail.ShouldNotBeNull(),
                 () => result.MetaScore.ShouldBe(94),
                 () => result.Name.ShouldBe("Factorio"),
                 () => result.Platform.ShouldBe(GamePlatform.PC),
                 () => result.ReleaseDate.ShouldBe(new DateTime(2020, 08, 14)),
                 () => result.Url.ShouldBe(@"https://www.metacritic.com/game/pc/factorio"),
                 () => result.UserScore.ShouldBe(9.7M),
-                () => result.GameDetail.NumberOfCriticReviews.ShouldBe(4),
-                () => result.GameDetail.NumberOfUserReviews.ShouldBe(190));
+                () => result.NumberOfCriticReviews.ShouldBe(4),
+                () => result.NumberOfUserReviews.ShouldBe(190));
         }
     }
 }

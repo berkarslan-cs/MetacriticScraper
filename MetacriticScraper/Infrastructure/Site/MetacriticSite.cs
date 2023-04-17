@@ -96,9 +96,9 @@ namespace MetacriticScraper.Infrastructure.Site
                     .Where(
                         w => (gameFilter.MinNumberOfCriticReviews == null ||
                             gameFilter.MinNumberOfCriticReviews == 0 ||
-                            w.GameDetail.NumberOfCriticReviews >= gameFilter.MinNumberOfCriticReviews) &&
+                            w.NumberOfCriticReviews >= gameFilter.MinNumberOfCriticReviews) &&
                         (gameFilter.MinNumberOfUserReviews == null ||
                             gameFilter.MinNumberOfUserReviews == 0 ||
-                            w.GameDetail.NumberOfUserReviews >= gameFilter.MinNumberOfUserReviews));
+                            w.NumberOfUserReviews >= gameFilter.MinNumberOfUserReviews));
     }
 }

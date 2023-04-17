@@ -53,11 +53,8 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
                     ReleaseDate = GetReleaseDate(game.ReleaseDate),
                     Url = GetUrl(game.Url),
                     UserScore = GetUserScore(game.UserScore),
-                    GameDetail = new GameDetail
-                    {
-                        NumberOfCriticReviews = GetNumberOfCriticReviews(game.NumberOfCriticReviews),
-                        NumberOfUserReviews = GetNumberOfUserReviews(game.NumberOfUserReviews),
-                    },
+                    NumberOfCriticReviews = GetNumberOfCriticReviews(game.NumberOfCriticReviews),
+                    NumberOfUserReviews = GetNumberOfUserReviews(game.NumberOfUserReviews),
                 };
 
         private static string TrimTabNewLineSpaces(string toBeTrimmedString) =>

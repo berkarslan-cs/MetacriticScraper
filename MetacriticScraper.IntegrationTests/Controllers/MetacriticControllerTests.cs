@@ -58,7 +58,7 @@ namespace MetacriticScraper.IntegrationTests.Controllers
                 () => games.ShouldNotBeEmpty(),
                 () => games.FirstOrDefault()?.Name?.ShouldNotBeNull(),
                 () => games.FirstOrDefault()?.Url?.ShouldNotBeNull(),
-                () => games.FirstOrDefault()?.GameDetail?.NumberOfCriticReviews.ShouldNotBeNull());
+                () => games.FirstOrDefault()?.NumberOfCriticReviews.ShouldNotBeNull());
         }
 
         [Test]
@@ -84,8 +84,8 @@ namespace MetacriticScraper.IntegrationTests.Controllers
                 () => games.ShouldNotBeEmpty(),
                 () => games.FirstOrDefault()?.Name?.ShouldNotBeNull(),
                 () => games.FirstOrDefault()?.Url?.ShouldNotBeNull(),
-                () => games.FirstOrDefault()?.GameDetail?.NumberOfCriticReviews.ShouldNotBeNull(),
-                () => games.ShouldAllBe(s => s.GameDetail.NumberOfCriticReviews >= 7));
+                () => games.FirstOrDefault()?.NumberOfCriticReviews.ShouldNotBeNull(),
+                () => games.ShouldAllBe(s => s.NumberOfCriticReviews >= 7));
         }
     }
 }
