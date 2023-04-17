@@ -170,8 +170,8 @@
     function getRowHtml(data) {
         return '<tr><td>' + (data.metaScore != null ? data.metaScore : 'TBD') + '</td>' +
             '<td><a target="_blank" href="' + data.url + '">' + data.name + '</a></td>' +
-            '<td>' + ((data.gameDetail.numberOfCriticReviews != null && data.gameDetail.numberOfCriticReviews != 0) ? data.gameDetail.numberOfCriticReviews : 'No score yet') + '</td>' +
-            '<td>' + ((data.gameDetail.numberOfUserReviews != null && data.gameDetail.numberOfUserReviews != 0) ? data.gameDetail.numberOfUserReviews : 'No user score yet') + '</td>' +
+            '<td>' + ((data.numberOfCriticReviews != null && data.numberOfCriticReviews != 0) ? data.numberOfCriticReviews : 'No score yet') + '</td>' +
+            '<td>' + ((data.numberOfUserReviews != null && data.numberOfUserReviews != 0) ? data.numberOfUserReviews : 'No user score yet') + '</td>' +
             '<td>' + platformText + '</td>' +
             '<td>' + (data.userScore != null ? data.userScore : 'TBD') + '</td>' +
             '<td>' + new Date(data.releaseDate).toLocaleDateString('en-US') + '</td></tr>'
