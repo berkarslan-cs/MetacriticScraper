@@ -177,7 +177,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 .Setup(s => s.GetNumberOfPages(It.IsAny<IXPathNavigable>()))
                 .Returns(1);
             htmlParserMock
-                .Setup(s => s.GetGames(It.IsAny<IXPathNavigable>()))
+                .Setup(s => s.GetGamesFromListPage(It.IsAny<IXPathNavigable>()))
                 .Returns(games);
             siteResolverMock
                 .Setup(s => s.GetGameHtmlDocument(Game1Url))
@@ -195,19 +195,19 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 .Setup(s => s.GetGameHtmlDocument(Game5Url))
                 .Returns(game5HtmlDoc.Object);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game1HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game1HtmlDoc.Object))
                 .Returns(gamesWithDetail[0]);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game2HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game2HtmlDoc.Object))
                 .Returns(gamesWithDetail[1]);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game3HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game3HtmlDoc.Object))
                 .Returns(gamesWithDetail[2]);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game4HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game4HtmlDoc.Object))
                 .Returns(gamesWithDetail[3]);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game5HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game5HtmlDoc.Object))
                 .Returns(gamesWithDetail[4]);
 
             // Act

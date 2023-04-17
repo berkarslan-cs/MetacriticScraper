@@ -25,7 +25,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             IXPathNavigable htmlDocument = null;
 
             // Act & Assert
-            Should.Throw<ArgumentNullException>(() => parser.GetGames(htmlDocument));
+            Should.Throw<ArgumentNullException>(() => parser.GetGamesFromListPage(htmlDocument));
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             htmlDocument.LoadHtml(html);
 
             // Act
-            var result = parser.GetGames(htmlDocument);
+            var result = parser.GetGamesFromListPage(htmlDocument);
 
             // Assert
             result.ShouldSatisfyAllConditions(
@@ -87,7 +87,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             IXPathNavigable htmlDocument = null;
 
             // Act & Assert
-            Should.Throw<ArgumentNullException>(() => parser.GetGameDetails(htmlDocument));
+            Should.Throw<ArgumentNullException>(() => parser.GetGameFromDetailPage(htmlDocument));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.HtmlParser
             htmlDocument.LoadHtml(html);
 
             // Act
-            var result = parser.GetGameDetails(htmlDocument);
+            var result = parser.GetGameFromDetailPage(htmlDocument);
 
             // Assert
             result.ShouldSatisfyAllConditions(

@@ -44,14 +44,14 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         public MetacriticHtmlParser(IMetacriticGameConverter metacriticGameConverter) => this.metacriticGameConverter = metacriticGameConverter;
 
         /// <inheritdoc/>
-        public IList<Game> GetGames(IXPathNavigable xPathNavigableHtmlDocument)
+        public IList<Game> GetGamesFromListPage(IXPathNavigable xPathNavigableHtmlDocument)
         {
             if (xPathNavigableHtmlDocument is not HtmlDocument htmlDocument)
             {
                 throw new ArgumentNullException(nameof(xPathNavigableHtmlDocument), $"Parameter should be non-empty {typeof(HtmlDocument).Name}");
             }
 
-            var gameListElements = GetGameListElements(htmlDocument);
+            var gameListElements = GetGameListHtmlElements(htmlDocument);
             var result = new List<Game>();
             foreach (var gameElement in gameListElements)
             {
@@ -75,12 +75,12 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         }
 
         /// <inheritdoc/>
-        public Game GetGameDetails(IXPathNavigable xPathNavigableHtmlDocument) =>
+        public Game GetGameFromDetailPage(IXPathNavigable xPathNavigableHtmlDocument) =>
             xPathNavigableHtmlDocument is not HtmlDocument htmlDocument
                 ? throw new ArgumentNullException(nameof(xPathNavigableHtmlDocument), $"Parameter should be non-empty {typeof(HtmlDocument).Name}")
                 : GetGameFromDetailPage(htmlDocument);
 
-        private static HtmlNodeCollection GetGameListElements(HtmlDocument htmlDocument)
+        private static HtmlNodeCollection GetGameListHtmlElements(HtmlDocument htmlDocument)
         {
             var gameListElements = htmlDocument.DocumentNode.SelectNodes(GameListElementSelector);
             return gameListElements ?? throw new Exception(GamesNotFoundErrorMessage);

@@ -41,8 +41,8 @@ namespace MetacriticScraper.Infrastructure.Site
             for (var pageIndex = 0; pageIndex < GetNumberOfPages(gameFilter.Platform); pageIndex++)
             {
                 var htmlDocument = siteResolver.GetMetacriticGameListHtmlDocument(gameFilter.Platform, pageIndex);
-                var gamesInPage = htmlParser.GetGames(htmlDocument);
-                var filteredGames = GetFilteredGames(gameFilter, gamesInPage);
+                var gamesInPage = htmlParser.GetGamesFromListPage(htmlDocument);
+                var filteredGames = ApplyFilters(gameFilter, gamesInPage);
                 result.AddRange(filteredGames);
 
                 // Continue processing until we have a game which has a release date less than the given MinReleaseDate filter
@@ -52,18 +52,8 @@ namespace MetacriticScraper.Infrastructure.Site
                 }
             }
 
-            // Get each game's details (Metacritic count etc.)
-            for (var index = 0; index < result.Count; index++)
-            {
-                var game = result[index];
-                var htmlDocument = siteResolver.GetGameHtmlDocument(game.Url);
-                var gameWithDetails = htmlParser.GetGameDetails(htmlDocument);
-                result[index] = gameWithDetails;
-            }
-
-            // Apply advanced filtering
-            result = GetDetailedFilteredGames(gameFilter, result).ToList();
-            return result;
+            FillGameDetails(result);
+            return ApplyAdditionalFilters(gameFilter, result).ToList();
         }
 
         /// <inheritdoc />
@@ -80,7 +70,7 @@ namespace MetacriticScraper.Infrastructure.Site
             return cachedNumberOfPages[gamePlatform];
         }
 
-        private static IEnumerable<Game> GetFilteredGames(
+        private static IEnumerable<Game> ApplyFilters(
             GameFilter gameFilter,
             IList<Game> gamesInPage) =>
                 gamesInPage.Where(
@@ -89,10 +79,10 @@ namespace MetacriticScraper.Infrastructure.Site
                     (gameFilter.MinReleaseDate == null || w.ReleaseDate >= gameFilter.MinReleaseDate) &&
                     (gameFilter.MinUserScore == null || gameFilter.MinUserScore == 0 || w.UserScore >= gameFilter.MinUserScore));
 
-        private static IEnumerable<Game> GetDetailedFilteredGames(
+        private static IEnumerable<Game> ApplyAdditionalFilters (
             GameFilter gameFilter,
             IList<Game> gamesInPage) =>
-                GetFilteredGames(gameFilter, gamesInPage)
+                ApplyFilters(gameFilter, gamesInPage)
                     .Where(
                         w => (gameFilter.MinNumberOfCriticReviews == null ||
                             gameFilter.MinNumberOfCriticReviews == 0 ||
@@ -100,5 +90,17 @@ namespace MetacriticScraper.Infrastructure.Site
                         (gameFilter.MinNumberOfUserReviews == null ||
                             gameFilter.MinNumberOfUserReviews == 0 ||
                             w.NumberOfUserReviews >= gameFilter.MinNumberOfUserReviews));
+
+        private void FillGameDetails(List<Game> result)
+        {
+            // Get each game's details (Metacritic review count, etc.)
+            for (var index = 0; index < result.Count; index++)
+            {
+                var game = result[index];
+                var htmlDocument = siteResolver.GetGameHtmlDocument(game.Url);
+                var gameWithDetails = htmlParser.GetGameFromDetailPage(htmlDocument);
+                result[index] = gameWithDetails;
+            }
+        }
     }
 }

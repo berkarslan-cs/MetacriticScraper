@@ -3,7 +3,7 @@
     /// <summary>
     /// Base properties of a game in the HTML pages.
     /// </summary>
-    public abstract class MetacriticGameBase
+    public abstract class MetacriticGamePageBase
     {
         /// <summary>
         /// Gets or sets name of the game.

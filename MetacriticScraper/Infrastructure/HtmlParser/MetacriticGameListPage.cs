@@ -3,7 +3,7 @@
     /// <summary>
     /// Original text values of Metacritic game elements in the list page.
     /// </summary>
-    public class MetacriticGameListPage : MetacriticGameBase
+    public class MetacriticGameListPage : MetacriticGamePageBase
     {
         /// <summary>
         /// Gets or sets Metacritic score of the game.
