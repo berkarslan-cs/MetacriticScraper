@@ -41,24 +41,32 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         };
 
         /// <inheritdoc />
-        public Game ConvertToGameEntity(
-            MetacriticGame game,
-            bool detailPageValidation = false) => !game.IsValid(detailPageValidation)
-                ? throw new Exception(GameDataNotFoundErrorMessage)
-                : new Game
-                {
-                    MetaScore = GetMetascore(game.MetaScore),
-                    Name = GetName(game.Name),
-                    Platform = GetPlatform(game.Platform),
-                    ReleaseDate = GetReleaseDate(game.ReleaseDate),
-                    Url = GetUrl(game.Url),
-                    UserScore = GetUserScore(game.UserScore),
-                    GameDetail = new GameDetail
-                    {
-                        NumberOfCriticReviews = GetNumberOfCriticReviews(game.NumberOfCriticReviews),
-                        NumberOfUserReviews = GetNumberOfUserReviews(game.NumberOfUserReviews),
-                    },
-                };
+        public Game ConvertToGameEntity(MetacriticGameListPage game) => !game.IsValid()
+            ? throw new Exception(GameDataNotFoundErrorMessage)
+            : new Game
+            {
+                MetaScore = GetMetascore(game.MetaScore),
+                Name = GetName(game.Name),
+                Platform = GetPlatform(game.Platform),
+                ReleaseDate = GetReleaseDate(game.ReleaseDate),
+                Url = GetUrl(game.Url),
+                UserScore = GetUserScore(game.UserScore),
+            };
+
+        /// <inheritdoc />
+        public Game ConvertToGameEntity(MetacriticGameDetailPage game) => !game.IsValid()
+            ? throw new Exception(GameDataNotFoundErrorMessage)
+            : new Game
+            {
+                MetaScore = GetMetascore(game.MetaScore),
+                Name = GetName(game.Name),
+                Platform = GetPlatform(game.Platform),
+                ReleaseDate = GetReleaseDate(game.ReleaseDate),
+                Url = GetUrl(game.Url),
+                UserScore = GetUserScore(game.UserScore),
+                NumberOfCriticReviews = GetNumberOfCriticReviews(game.NumberOfCriticReviews),
+                NumberOfUserReviews = GetNumberOfUserReviews(game.NumberOfUserReviews),
+            };
 
         private static string TrimTabNewLineSpaces(string toBeTrimmedString) =>
             toBeTrimmedString.Trim(new char[]

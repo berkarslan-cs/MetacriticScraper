@@ -31,19 +31,21 @@ namespace MetacriticScraper.Controllers
         [HttpGet]
         public ActionResult<IList<Game>> Get([FromQuery] GameFilter gameFilter)
         {
-            // Validate input
-            if (gameFilter?.MinReleaseDate == null || gameFilter?.MinReleaseDate > DateTime.Now)
-            {
-                ModelState.AddModelError(nameof(gameFilter.MinReleaseDate), NotValidDateErrorMessage);
-            }
-
+            ValidateGameFilter(gameFilter);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            // Process
             return Ok(site.GetGames(gameFilter));
+        }
+
+        private void ValidateGameFilter(GameFilter gameFilter)
+        {
+            if (gameFilter?.MinReleaseDate == null || gameFilter?.MinReleaseDate > DateTime.Now)
+            {
+                ModelState.AddModelError(nameof(gameFilter.MinReleaseDate), NotValidDateErrorMessage);
+            }
         }
     }
 }

@@ -89,11 +89,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             ReleaseDate = new DateTime(DateTime.Now.Year, 1, 1),
             Url = Game1Url,
             UserScore = 10,
-            GameDetail = new GameDetail
-            {
-                NumberOfCriticReviews = 7,
-                NumberOfUserReviews = 10,
-            },
+            NumberOfCriticReviews = 7,
+            NumberOfUserReviews = 10,
         };
 
         private static readonly Game gameWithDetail2 = new ()
@@ -104,10 +101,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             ReleaseDate = new DateTime(DateTime.Now.Year - 1, 12, 31),
             Url = Game2Url,
             UserScore = 6.3M,
-            GameDetail = new GameDetail
-            {
-                NumberOfUserReviews = 10,
-            },
+            NumberOfUserReviews = 10,
         };
 
         private static readonly Game gameWithDetail3 = new ()
@@ -118,10 +112,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             ReleaseDate = new DateTime(DateTime.Now.Year - 1, 1, 1),
             Url = Game3Url,
             UserScore = 3.4M,
-            GameDetail = new GameDetail
-            {
-                NumberOfCriticReviews = 7,
-            },
+            NumberOfCriticReviews = 7,
         };
 
         private static readonly Game gameWithDetail4 = new ()
@@ -132,11 +123,8 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
             ReleaseDate = new DateTime(DateTime.Now.Year - 2, 12, 11),
             Url = Game4Url,
             UserScore = 5.9M,
-            GameDetail = new GameDetail
-            {
-                NumberOfCriticReviews = 7,
-                NumberOfUserReviews = 3,
-            },
+            NumberOfCriticReviews = 7,
+            NumberOfUserReviews = 3,
         };
 
         private static readonly Game gameWithDetail5 = new ()
@@ -189,7 +177,7 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 .Setup(s => s.GetNumberOfPages(It.IsAny<IXPathNavigable>()))
                 .Returns(1);
             htmlParserMock
-                .Setup(s => s.GetGames(It.IsAny<IXPathNavigable>()))
+                .Setup(s => s.GetGamesFromListPage(It.IsAny<IXPathNavigable>()))
                 .Returns(games);
             siteResolverMock
                 .Setup(s => s.GetGameHtmlDocument(Game1Url))
@@ -207,19 +195,19 @@ namespace MetacriticScraper.UnitTests.Infrastructure.Site
                 .Setup(s => s.GetGameHtmlDocument(Game5Url))
                 .Returns(game5HtmlDoc.Object);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game1HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game1HtmlDoc.Object))
                 .Returns(gamesWithDetail[0]);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game2HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game2HtmlDoc.Object))
                 .Returns(gamesWithDetail[1]);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game3HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game3HtmlDoc.Object))
                 .Returns(gamesWithDetail[2]);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game4HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game4HtmlDoc.Object))
                 .Returns(gamesWithDetail[3]);
             htmlParserMock
-                .Setup(s => s.GetGameDetails(game5HtmlDoc.Object))
+                .Setup(s => s.GetGameFromDetailPage(game5HtmlDoc.Object))
                 .Returns(gamesWithDetail[4]);
 
             // Act

@@ -44,18 +44,18 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         public MetacriticHtmlParser(IMetacriticGameConverter metacriticGameConverter) => this.metacriticGameConverter = metacriticGameConverter;
 
         /// <inheritdoc/>
-        public IList<Game> GetGames(IXPathNavigable xPathNavigableHtmlDocument)
+        public IList<Game> GetGamesFromListPage(IXPathNavigable xPathNavigableHtmlDocument)
         {
             if (xPathNavigableHtmlDocument is not HtmlDocument htmlDocument)
             {
                 throw new ArgumentNullException(nameof(xPathNavigableHtmlDocument), $"Parameter should be non-empty {typeof(HtmlDocument).Name}");
             }
 
-            var gameListElements = GetGameListElements(htmlDocument);
+            var gameListElements = GetGameListHtmlElements(htmlDocument);
             var result = new List<Game>();
             foreach (var gameElement in gameListElements)
             {
-                result.Add(GetGameWithBasicInfo(gameElement));
+                result.Add(GetGameFromListPage(gameElement));
             }
 
             return result;
@@ -75,20 +75,20 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
         }
 
         /// <inheritdoc/>
-        public Game GetGameDetails(IXPathNavigable xPathNavigableHtmlDocument) =>
+        public Game GetGameFromDetailPage(IXPathNavigable xPathNavigableHtmlDocument) =>
             xPathNavigableHtmlDocument is not HtmlDocument htmlDocument
                 ? throw new ArgumentNullException(nameof(xPathNavigableHtmlDocument), $"Parameter should be non-empty {typeof(HtmlDocument).Name}")
-                : GetGameWithDetailedInfo(htmlDocument);
+                : GetGameFromDetailPage(htmlDocument);
 
-        private static HtmlNodeCollection GetGameListElements(HtmlDocument htmlDocument)
+        private static HtmlNodeCollection GetGameListHtmlElements(HtmlDocument htmlDocument)
         {
             var gameListElements = htmlDocument.DocumentNode.SelectNodes(GameListElementSelector);
             return gameListElements ?? throw new Exception(GamesNotFoundErrorMessage);
         }
 
-        private Game GetGameWithBasicInfo(HtmlNode gameElement)
+        private Game GetGameFromListPage(HtmlNode gameElement)
         {
-            var metacriticGame = new MetacriticGame
+            var metacriticGame = new MetacriticGameListPage
             {
                 MetaScore = gameElement.SelectSingleNode(GameListMetaScoreXPathSelector)?.InnerText,
                 Name = gameElement.SelectSingleNode(GameListNameXPathSelector)?.InnerText,
@@ -101,9 +101,9 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
             return metacriticGameConverter.ConvertToGameEntity(metacriticGame);
         }
 
-        private Game GetGameWithDetailedInfo(HtmlDocument htmlDocument)
+        private Game GetGameFromDetailPage(HtmlDocument htmlDocument)
         {
-            var metacriticGame = new MetacriticGame
+            var metacriticGame = new MetacriticGameDetailPage
             {
                 MetaScore = htmlDocument.DocumentNode.SelectSingleNode(GameDetailMetaScoreXPathSelector)?.InnerText,
                 Name = htmlDocument.DocumentNode.SelectSingleNode(GameDetailNameXPathSelector)?.InnerText,
@@ -115,7 +115,7 @@ namespace MetacriticScraper.Infrastructure.HtmlParser
                 NumberOfUserReviews = htmlDocument.DocumentNode.SelectSingleNode(GameDetailNumberOfUserReviews)?.InnerText,
             };
 
-            return metacriticGameConverter.ConvertToGameEntity(metacriticGame, true);
+            return metacriticGameConverter.ConvertToGameEntity(metacriticGame);
         }
     }
 }

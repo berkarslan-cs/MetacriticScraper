@@ -40,8 +40,13 @@ namespace MetacriticScraper.Models
         public DateTime ReleaseDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the details of the game.
+        /// Gets or sets the number of critic reviews.
         /// </summary>
-        public GameDetail GameDetail { get; set; }
+        public int? NumberOfCriticReviews { get; set; }
+
+        /// <summary>
+        /// Gets or sets the number of user reviews.
+        /// </summary>
+        public int? NumberOfUserReviews { get; set; }
     }
 }
