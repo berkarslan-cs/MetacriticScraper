@@ -1,25 +1,63 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+      - master
+
+pr:
+  - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: ubuntu-latest
 
 variables:
-  buildConfiguration: 'Release'
+  - group: Docker Hub
+  - name: projectName
+    value: $(System.TeamProject)
+  - name: dockerRepository
+    value: $(DOCKERHUB_USERNAME)/metacriticscraper
+  - name: dockerImageVersionTag
+    value: 0.1.$(Build.BuildId)
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration) $(System.TeamProject).sln
-  displayName: 'Building'
+jobs:
+  - job: BuildSolution
+    displayName: Build Solution
+    steps:
+      - task: DotNetCoreCLI@2
+        displayName: Building
+        inputs:
+          command: build
+          arguments: --configuration $(buildConfiguration) $(projectName).sln
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
-    projects: '**/*Tests/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings'
-    testRunTitle: 'Run tests'
-  displayName: 'Running Unit and Integration Tests'
+      - task: DotNetCoreCLI@2
+        displayName: Running Unit Tests
+        inputs:
+          command: test
+          projects: '**/*UnitTests.csproj'
+          arguments: '--configuration $(buildConfiguration) --collect "Code coverage" --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
+          testRunTitle: Unit Tests
+
+      - task: DotNetCoreCLI@2
+        displayName: Running Integration Tests
+        inputs:
+          command: test
+          projects: '**/*IntegrationTests.csproj'
+          arguments: '--configuration $(buildConfiguration) --settings $(System.DefaultWorkingDirectory)/.runsettings --no-build'
+          testRunTitle: Integration Tests
+
+  - job: PrepareDockerImage
+    displayName: Build & Push Docker Image
+    dependsOn: BuildSolution
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    steps:
+      - task: Docker@2
+        displayName: Building & Publishing Docker Image
+        inputs:
+          containerRegistry: DockerHub
+          repository: $(dockerRepository)
+          command: buildAndPush
+          Dockerfile: $(projectName)/Dockerfile
+          buildContext: .
+          tags: |
+            latest
+            $(dockerImageVersionTag)
