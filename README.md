@@ -9,10 +9,10 @@ MetacriticScraper is a scraper project for Metacritic, built using .NET Core. It
 You can run MetacriticScraper in several ways, such as using Docker, IIS Express, or Self Hosting. To run the project using Docker (assuming Docker is installed), enter the following command:
 
 ```
-docker run -dp 8081:443 berkarslan/metacriticscraper
+docker run -dp 8081:80 berkarslan/metacriticscraper
 ```
 
-Then, navigate to https://localhost:8081/index.html to access the project.
+Then, navigate to http://localhost:8081/index.html to access the project.
 
 ## How to Use MetacriticScraper
 MetacriticScraper includes a single API method, which is a GET endpoint. The API accepts the following filter parameters:
@@ -22,7 +22,7 @@ MetacriticScraper includes a single API method, which is a GET endpoint. The API
 - **MinReleaseDate**: Minimum release date for the games. Setting this property will return the games which are released between MinReleaseDate-DateTime.Now.
 
 A sample API request URL can look like the following:
-https://localhost:8081/api/Metacritic?Platform=0&MinMetaScore=75&MinUserScore=6.5&MinReleaseDate=2019-11-01
+http://localhost:8081/api/Metacritic?Platform=0&MinMetaScore=75&MinUserScore=6.5&MinReleaseDate=2019-11-01
 
 ## Sample UI Screenshot
 ![image](https://user-images.githubusercontent.com/14029115/95655323-13d3e180-0b0f-11eb-86a3-380df57b3bb3.png)
